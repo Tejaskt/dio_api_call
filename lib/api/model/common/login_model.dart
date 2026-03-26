@@ -1,5 +1,7 @@
-class ResponseInMap {
-  ResponseInMap({
+class LogInModel {
+
+  /// LogInModel Class Constructor
+  LogInModel({
     required this.id,
     required this.username,
     required this.email,
@@ -11,6 +13,7 @@ class ResponseInMap {
     required this.refreshToken,
   });
 
+  /// LogInModel class member variables
   final int? id;
   final String? username;
   final String? email;
@@ -21,7 +24,8 @@ class ResponseInMap {
   final String? accessToken;
   final String? refreshToken;
 
-  ResponseInMap copyWith({
+  // ! what is this class used for
+  LogInModel copyWith({
     int? id,
     String? username,
     String? email,
@@ -32,7 +36,7 @@ class ResponseInMap {
     String? accessToken,
     String? refreshToken,
   }) {
-    return ResponseInMap(
+    return LogInModel(
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
@@ -45,8 +49,9 @@ class ResponseInMap {
     );
   }
 
-  factory ResponseInMap.fromJson(Map<String, dynamic> json){
-    return ResponseInMap(
+  // ! why this factory method used for
+  factory LogInModel.fromJson(Map<String, dynamic> json){
+    return LogInModel(
       id: json["id"],
       username: json["username"],
       email: json["email"],
@@ -59,6 +64,7 @@ class ResponseInMap {
     );
   }
 
+  // ! what is the internal work of this function.
   Map<String, dynamic> toJson() => {
     "id": id,
     "username": username,
