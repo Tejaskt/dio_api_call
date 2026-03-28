@@ -21,12 +21,24 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF6C63FF),
+              brightness: Brightness.light,
+            ),
+            textTheme: const TextTheme(
+              headlineLarge: TextStyle(
+                fontSize: 34,
+                fontWeight: .bold
+              ),
+              bodyLarge: TextStyle(
+                fontSize: 16
+              )
+            )
           ),
-          initialRoute: RoutesName.splash ,
+          initialRoute: RoutesName.splash,
           routes: AppRoutes.routes,
         );
-       }
-       );
-      }
+      },
+    );
   }
-
+}
