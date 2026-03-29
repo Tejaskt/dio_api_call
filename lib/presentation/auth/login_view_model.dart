@@ -13,7 +13,7 @@ class LoginViewModel extends ChangeNotifier {
 
   LoginViewModel(this.repository);
 
-  Future<void> login(String username, String password) async {
+  Future<bool> login(String username, String password) async {
     isLoading = true;
     error = null;
     notifyListeners();
@@ -23,11 +23,17 @@ class LoginViewModel extends ChangeNotifier {
         LoginRequest(username: username, password: password),
       );
 
-      SecureStorage.saveToken(user!.accessToken);
+      await SecureStorage.saveToken(user!.accessToken);
+      await SecureStorage.saveUser(user!);
+      
+      isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
       error = e.toString();
+      isLoading = false;
+      notifyListeners();
+      return false;
     }
-    notifyListeners();
   }
-
 }

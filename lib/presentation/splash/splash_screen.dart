@@ -14,21 +14,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-
-  bool isUserLoggedIn(){
-    final token = SecureStorage.getToken();
-    if(token.toString() != ''){
-      return true;
-    }else{
-      return false;
-    }
-  }
-
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-  bool? isLoggedIn;
-
 
   @override
   void initState() {
@@ -50,26 +38,29 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Simulate login check
-    Future.delayed(const Duration(seconds: 2), () {
-      isLoggedIn = true;
-
-      // if (isLoggedIn != null) {
-      //   widget.onNavigate(isLoggedIn!);
-      // }
-    });
+    _checkLoginStatus();
   }
 
+  Future<void> _checkLoginStatus() async {
+    // Wait for animation to play a bit
+    await Future.delayed(const Duration(seconds: 2));
+    
+    final token = await SecureStorage.getToken();
+    
+    if (mounted) {
+      if (token != null && token.isNotEmpty) {
+        Navigator.pushReplacementNamed(context, RoutesName.home);
+      } else {
+        Navigator.pushReplacementNamed(context, RoutesName.login);
+      }
+    }
+  }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-    // isUserLoggedIn()
-    //     ?  Navigator.pushReplacementNamed(context, RoutesName.login)
-    //     :  Navigator.pushReplacementNamed(context, RoutesName.home);
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,17 +96,14 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-
                         // logo container
                         Container(
                           width: iconSize,
                           height: iconSize,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius:
-                            BorderRadius.circular(iconSize / 3),
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(iconSize / 3),
                           ),
-                          //padding: EdgeInsets.all(iconSize * 0.12),
                           child: Image.asset(
                             AppImages.chefLogo,
                           ),
@@ -139,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
                           AppStrings.appMoto,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Colors.white.withValues(alpha: 0.85),
+                            color: Colors.white.withOpacity(0.85),
                           ),
                         ),
 
