@@ -1,5 +1,6 @@
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_images.dart';
+import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
 import '../../core/routes/route_name.dart';
 import '../../core/storage/secure_storage.dart';
@@ -124,7 +125,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                         // Title
                         Text(
-                          "Recipify",
+                          AppStrings.appName,
                           style: theme.textTheme.headlineLarge?.copyWith(
                             color: Colors.white,
                             letterSpacing: 0.5,
@@ -135,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                         // Subtitle
                         Text(
-                          "Discover Delicious Recipes",
+                          AppStrings.appMoto,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Colors.white.withValues(alpha: 0.85),
