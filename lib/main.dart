@@ -1,9 +1,8 @@
-import 'package:dio_api_call/core/routes/route.dart';
-import 'package:dio_api_call/core/routes/route_name.dart';
-import 'package:dio_api_call/presentation/auth/login_screen.dart';
-import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:dio_api_call/core/routes/route.dart';
+import 'package:dio_api_call/core/routes/route_name.dart';
+import 'package:dio_api_call/res/app_strings.dart';
 
 void main() {
   runApp(const MyApp());

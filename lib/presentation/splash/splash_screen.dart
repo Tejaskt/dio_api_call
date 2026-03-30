@@ -46,10 +46,17 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(seconds: 2));
     
     final token = await SecureStorage.getToken();
-    
+
+    /* What mounted does
+     * mounted == true → widget is still in the tree → safe to use context
+     * Error :
+     * If you try to use context after disposal, Flutter throws an error like:
+     * “Looking up a deactivated widget's ancestor is unsafe”
+    */
+
     if (mounted) {
       if (token != null && token.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, RoutesName.home);
+        Navigator.pushReplacementNamed(context, RoutesName.bottomNavigation);
       } else {
         Navigator.pushReplacementNamed(context, RoutesName.login);
       }
@@ -101,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
                           width: iconSize,
                           height: iconSize,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: AppColors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(iconSize / 3),
                           ),
                           child: Image.asset(
@@ -115,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen>
                         Text(
                           AppStrings.appName,
                           style: theme.textTheme.headlineLarge?.copyWith(
-                            color: Colors.white,
+                            color: AppColors.white,
                             letterSpacing: 0.5,
                           ),
                         ),
@@ -127,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen>
                           AppStrings.appMoto,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Colors.white.withOpacity(0.85),
+                            color: AppColors.white.withValues(alpha: 0.85),
                           ),
                         ),
 

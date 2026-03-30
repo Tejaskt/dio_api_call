@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import '../../../core/storage/secure_storage.dart';
 import 'api_end_point.dart';
+import '../../../core/storage/secure_storage.dart';
 
 APIClient apiClient = APIClient();
 
@@ -22,7 +22,7 @@ class APIClient {
       ),
     );
 
-    //?  avoid :  Adding interceptor inside every API call || Creating multiple Dio instances
+    ///  avoid :  Adding interceptor inside every API call || Creating multiple Dio instances
     _dio.interceptors.add(_authInterceptor());
     _dio.interceptors.add(_logInterceptor());
   }

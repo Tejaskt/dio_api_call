@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:dio_api_call/data/model/response/login_response.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../data/model/response/login_response.dart';
 
 class SecureStorage {
   static final _storage = const FlutterSecureStorage();
@@ -8,6 +8,7 @@ class SecureStorage {
   static const _tokenKey = 'access_token';
   static const _userKey = 'user_data';
 
+  /// Future : “I don’t have the result now, but I promise I’ll give it to you later.”
   static Future<void> saveToken(String token) async {
     await _storage.write(key: _tokenKey, value: token);
   }

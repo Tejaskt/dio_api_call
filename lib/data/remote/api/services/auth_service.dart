@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:dio_api_call/data/model/response/login_response.dart';
-import 'package:dio_api_call/data/remote/api/api_end_point.dart';
+import '../../../../data/model/response/login_response.dart';
+import '../../../../data/remote/api/api_end_point.dart';
 import '../../../../core/error/app_exception.dart';
 import '../../../model/request/login_request.dart';
 

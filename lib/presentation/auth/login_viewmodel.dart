@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:dio_api_call/core/storage/secure_storage.dart';
 import 'package:dio_api_call/data/model/request/login_request.dart';
 import 'package:dio_api_call/data/model/response/login_response.dart';
 import 'package:dio_api_call/domain/repository/auth_repository.dart';
-import 'package:flutter/material.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthRepository repository;
@@ -25,7 +25,7 @@ class LoginViewModel extends ChangeNotifier {
 
       await SecureStorage.saveToken(user!.accessToken);
       await SecureStorage.saveUser(user!);
-      
+
       isLoading = false;
       notifyListeners();
       return true;
