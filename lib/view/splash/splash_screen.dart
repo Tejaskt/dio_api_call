@@ -56,9 +56,9 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (mounted) {
       if (token != null && token.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, RoutesName.bottomNavigation);
+        Navigator.pushReplacementNamed(context, RouteName.bottomNavigation);
       } else {
-        Navigator.pushReplacementNamed(context, RoutesName.login);
+        Navigator.pushReplacementNamed(context, RouteName.login);
       }
     }
   }

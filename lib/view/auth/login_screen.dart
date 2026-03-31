@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (success && mounted) {
                               Navigator.pushReplacementNamed(
                                 context,
-                                RoutesName.bottomNavigation,
+                                RouteName.bottomNavigation,
                               );
                             }
                           },

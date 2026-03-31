@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:dio_api_call/core/routes/route.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
-        return MaterialApp(
+        return GetMaterialApp(
           title: AppStrings.appName,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -34,8 +35,8 @@ class MyApp extends StatelessWidget {
               )
             )
           ),
-          initialRoute: RoutesName.splash,
-          routes: AppRoutes.routes,
+          initialRoute: RouteName.splash,
+          getPages: AppRoutes.appRoutes(),
         );
       },
     );
