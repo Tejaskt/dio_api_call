@@ -13,5 +13,6 @@ class AppRoutes {
     RoutesName.home: (_) => HomeScreen(),
     RoutesName.profile: (_) => ProfileScreen(),
     RoutesName.bottomNavigation: (_) => BottomNavigationView(),
+  //  RoutesName.recipeDetails: (_) => RecipeDetailScreen(recipeId: recipeId),
   };
 }

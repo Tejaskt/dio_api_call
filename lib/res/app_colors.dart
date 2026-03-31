@@ -13,6 +13,7 @@ class AppColors {
   static const Color redAccent = Colors.redAccent;
   static final Color listTileLabel  = Colors.grey[600]!;
   static const Color red = Colors.red;
+  static const Color orange = Colors.orange;
 
   /// App Primary Colors.
   static const Color orangePrimary = Color(0xFFFF7A33);

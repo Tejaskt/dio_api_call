@@ -1,13 +1,14 @@
+import 'package:dio_api_call/core/component/shimmer_effect.dart';
 import 'package:dio_api_call/view/home/home_controller.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import '../../api/api_client.dart';
 import '../../api/model/response/recipe_response.dart';
 import '../../api/services/recipe_service.dart';
+import '../recipe_details/recipe_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Consumer<HomeController>(
           builder: (context, vm, _) {
             if (vm.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const ShimmerEffect();
+              //return const Center(child: CircularProgressIndicator());
             }
 
             if (vm.error != null) {
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //padding: EdgeInsets.symmetric(horizontal : 5.w, vertical: 4.h),
               itemCount: vm.recipes.length,
               itemBuilder: (context, index) {
-                return recipeCard(recipe: vm.recipes[index]);
+                return recipeCard(recipe: vm.recipes[index],context: context);
               },
             );
           },
@@ -55,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-Widget recipeCard({required Recipe recipe}) {
+Widget recipeCard({required Recipe recipe, required BuildContext context}) {
   final totalTime = recipe.prepTime + recipe.cookTime;
 
   return Container(
@@ -71,13 +73,27 @@ Widget recipeCard({required Recipe recipe}) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Image
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: Image.network(
-            recipe.image,
-            height: 10.h,
-            width: double.infinity,
-            fit: BoxFit.cover,
+        GestureDetector(
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => RecipeDetailScreen(recipeId: recipe.id),
+              ),
+            );
+          },
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Hero(
+              tag: 'recipe_${recipe.id}',
+              child: Image.network(
+                recipe.image,
+                height: 10.h,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (_,_,_) => const Icon(Icons.broken_image,size: 100),
+              ),
+            ),
           ),
         ),
 
@@ -105,7 +121,7 @@ Widget recipeCard({required Recipe recipe}) {
                     // Rating
                     Row(
                       children: [
-                        const Icon(Icons.star, color: Colors.orange, size: 18),
+                        const Icon(Icons.star, color: AppColors.orange, size: 18),
                         const SizedBox(width: 4),
                         Text(recipe.rating.toString()),
                       ],

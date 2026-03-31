@@ -14,7 +14,12 @@ class ApiEndPoint {
   static const String mimeURLEncoded = 'application/x-www-form-urlencoded';
   static const dynamic defaultRequestForCallBack = {"screen": "mobile"};
 
+  // BASE URL
   final String baseUrl = 'https://dummyjson.com/';
+  // AUTH
   final String login = 'auth/login';
+  // RECIPES
   final String getRecipe = 'recipes';
+
+
 }
