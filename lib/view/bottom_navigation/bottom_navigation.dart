@@ -1,5 +1,5 @@
-import 'package:dio_api_call/presentation/home/home_screen.dart';
-import 'package:dio_api_call/presentation/profile/profile_screen.dart';
+import 'package:dio_api_call/view/home/home_screen.dart';
+import 'package:dio_api_call/view//profile/profile_screen.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:flutter/material.dart';
 

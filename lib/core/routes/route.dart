@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../core/routes/route_name.dart';
-import '../../presentation/profile/profile_screen.dart';
-import '../../presentation/splash/splash_screen.dart';
-import '../../presentation/auth/login_screen.dart';
-import '../../presentation/home/home_screen.dart';
-import '../../presentation/widgets/bottom_navigation.dart';
+import '../../view/bottom_navigation/bottom_navigation.dart';
+import '../../view/profile/profile_screen.dart';
+import '../../view/splash/splash_screen.dart';
+import '../../view/auth/login_screen.dart';
+import '../../view/home/home_screen.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder>  routes = {

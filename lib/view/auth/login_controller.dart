@@ -1,17 +1,17 @@
+import 'package:dio_api_call/api/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dio_api_call/core/storage/secure_storage.dart';
-import 'package:dio_api_call/data/model/request/login_request.dart';
-import 'package:dio_api_call/data/model/response/login_response.dart';
-import 'package:dio_api_call/domain/repository/auth_repository.dart';
+import '../../api/model/request/login_request.dart';
+import '../../api/model/response/login_response.dart';
 
-class LoginViewModel extends ChangeNotifier {
-  final AuthRepository repository;
+class LoginController extends ChangeNotifier {
+  final AuthService _authApi;
 
   bool isLoading = false;
   String? error;
   LoginResponse? user;
 
-  LoginViewModel(this.repository);
+  LoginController(this._authApi);
 
   Future<bool> login(String username, String password) async {
     isLoading = true;
@@ -19,7 +19,7 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      user = await repository.login(
+      user = await _authApi.login(
         LoginRequest(username: username, password: password),
       );
 

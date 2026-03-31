@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import '../../../../data/model/response/login_response.dart';
-import '../../../../data/remote/api/api_end_point.dart';
 import '../../../../core/error/app_exception.dart';
-import '../../../model/request/login_request.dart';
+import '../api_end_point.dart';
+import '../model/request/login_request.dart';
+import '../model/response/login_response.dart';
 
 class AuthService {
 

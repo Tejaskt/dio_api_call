@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_api_call/core/error/app_exception.dart';
-import 'package:dio_api_call/data/model/response/recipe_response.dart';
-import 'package:dio_api_call/data/remote/api/api_end_point.dart';
+import '../api_end_point.dart';
+import '../model/response/recipe_response.dart';
 
 class RecipeService {
   final Dio dio;

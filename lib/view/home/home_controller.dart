@@ -1,11 +1,12 @@
-import 'package:dio_api_call/data/model/response/recipe_response.dart';
-import 'package:dio_api_call/data/remote/api/services/recipe_service.dart';
 import 'package:flutter/cupertino.dart';
 
-class RecipeViewModel extends ChangeNotifier {
+import '../../api/model/response/recipe_response.dart';
+import '../../api/services/recipe_service.dart';
+
+class HomeController extends ChangeNotifier {
   final RecipeService _recipeApi;
 
-  RecipeViewModel(this._recipeApi);
+  HomeController(this._recipeApi);
 
   List<Recipe> recipes = [];
   bool isLoading = false;

@@ -1,3 +1,4 @@
+import 'package:dio_api_call/api/model/request/login_request.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_fonts.dart';
@@ -5,11 +6,10 @@ import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../data/repository/auth_repository_impl.dart';
-import '../../data/remote/api/api_client.dart';
-import '../../data/remote/api/services/auth_service.dart';
+import '../../api/api_client.dart';
+import '../../api/services/auth_service.dart';
 import '../../res/app_images.dart';
-import 'login_viewmodel.dart';
+import 'login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -34,9 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) =>
-          LoginViewModel(AuthRepositoryImpl(AuthService(apiClient.dio))),
+          LoginController(AuthService(apiClient.dio)),
       child: Scaffold(
-        body: Consumer<LoginViewModel>(
+        body: Consumer<LoginController>(
           builder: (context, vm, _) {
             return SafeArea(
               child: SingleChildScrollView(
