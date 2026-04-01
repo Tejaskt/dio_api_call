@@ -1,16 +1,12 @@
-import 'package:dio_api_call/api/api_client.dart';
 import 'package:dio_api_call/core/component/shimmer_effect.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../api/services/recipe_service.dart';
 import '../../res/app_colors.dart';
 
-class RecipeDetailScreen extends StatelessWidget {
-  final int recipeId;
-
-  const RecipeDetailScreen({super.key, required this.recipeId});
+class RecipeDetailScreen extends GetView<RecipeDetailsController> {
+  const RecipeDetailScreen({super.key});
 
   static final txtStyle = TextStyle(
     fontFamily: 'Lato',
@@ -20,200 +16,150 @@ class RecipeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) =>
-          RecipeDetailsController(RecipeService(apiClient.dio))
-            ..fetchRecipe(recipeId),
-      child: Scaffold(
-        body: Consumer<RecipeDetailsController>(
-          builder: (context, vm, _) {
-            if (vm.isLoading) {
-              return const Scaffold(body: ShimmerEffect());
-              //return const Center(child: CircularProgressIndicator());
-            }
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Scaffold(body: ShimmerEffect());
+      }
 
-            if (vm.error != null) {
-              return Center(child: Text(vm.error!));
-            }
+      if (controller.errorMessage.value.isNotEmpty) {
+        return Scaffold(
+          body: Center(child: Text(controller.errorMessage.value)),
+        );
+      }
 
-            final recipe = vm.recipe!;
+      final recipe = controller.recipe.value!;
+      final totalTime = recipe.prepTime + recipe.cookTime;
 
-            final totalTime = recipe.prepTime + recipe.cookTime;
-
-            return CustomScrollView(
-              slivers: [
-                //  IMAGE APPBAR
-                SliverAppBar(
-                  iconTheme: IconThemeData(color: AppColors.white),
-                  backgroundColor: AppColors.orangePrimary,
-                  expandedHeight: 250,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: ColoredBox(
-                      color: AppColors.orangePrimary.withValues(alpha: 0.6),
-                      child: Text(
-                        recipe.name,
-                        maxLines: 1,
-                        style: TextStyle(color: AppColors.white),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    background: Hero(
-                      tag: "recipe_${recipe.id}",
-                      child: Image.network(
-                        recipe.image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) =>
-                            const Icon(Icons.broken_image, size: 100),
-                      ),
-                    ),
+      return Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              iconTheme: const IconThemeData(color: AppColors.white),
+              backgroundColor: AppColors.orangePrimary,
+              expandedHeight: 250,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: ColoredBox(
+                  color: AppColors.orangePrimary.withValues(alpha: 0.6),
+                  child: Text(
+                    recipe.name,
+                    maxLines: 1,
+                    style: const TextStyle(color: AppColors.white),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-
-                // CONTENT
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                background: Hero(
+                  tag: 'recipe_${recipe.id}',
+                  child: Image.network(
+                    recipe.image,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) =>
+                    const Icon(Icons.broken_image, size: 100),
+                  ),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // INFO ROW
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.black),
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: .center,
-                                  spacing: 8,
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      color: AppColors.orange,
-                                      size: 18.sp,
-                                    ),
-                                    Text("${recipe.rating}", style: txtStyle),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.black),
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "$totalTime min",
-                                    style: txtStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.black),
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "${recipe.servings} servings",
-                                    style: txtStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // INGREDIENTS
-                        Center(
-                          child: Chip(
-                            label: Text(
-                              "Ingredients",
-                              style: TextStyle(
-                                fontFamily: 'Lato',
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                        _infoBox(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.star,
+                                  color: AppColors.orange, size: 18),
+                              const SizedBox(width: 8),
+                              Text('${recipe.rating}', style: txtStyle),
+                            ],
                           ),
                         ),
-
-                        const SizedBox(height: 8),
-
-                        ...recipe.ingredients.map(
-                          (e) => SizedBox(
-                            width: .infinity,
-                            child: Card(
-                              color: AppColors.orangeLight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "• $e",
-                                  style: txtStyle.copyWith(
-                                    fontSize: 16.sp,
-                                    fontWeight: .normal,
-                                  ),
-                                ),
-                              ),
-                            ),
+                        _infoBox(
+                          Center(
+                            child: Text('$totalTime min', style: txtStyle),
                           ),
                         ),
-
-                        const SizedBox(height: 16),
-
-                        // INSTRUCTIONS
-                        Center(
-                          child: Chip(
-                            label: Text(
-                              "Instructions",
-                              style: TextStyle(
-                                fontFamily: 'Lato',
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        ...recipe.instructions.asMap().entries.map(
-                          (entry) => SizedBox(
-                            width: .infinity,
-                            child: Card(
-                              color: AppColors.orangeLight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "${entry.key + 1}. ${entry.value}",
-                                  style: txtStyle.copyWith(
-                                    fontSize: 16.sp,
-                                    fontWeight: .normal,
-                                  ),
-                                ),
-                              ),
+                        _infoBox(
+                          Center(
+                            child: Text(
+                              '${recipe.servings} servings',
+                              style: txtStyle,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    _sectionChip('Ingredients'),
+                    const SizedBox(height: 8),
+                    ...recipe.ingredients.map(
+                          (e) => _contentCard('• $e'),
+                    ),
+                    const SizedBox(height: 16),
+                    _sectionChip('Instructions'),
+                    const SizedBox(height: 8),
+                    ...recipe.instructions.asMap().entries.map(
+                          (entry) => _contentCard(
+                        '${entry.key + 1}. ${entry.value}',
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                  ],
                 ),
-              ],
-            );
-          },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _infoBox(Widget child) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.black),
+          borderRadius: BorderRadius.circular(0),
+        ),
+        child: child,
+      ),
+    );
+  }
+
+  Widget _sectionChip(String label) {
+    return Center(
+      child: Chip(
+        label: Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'Lato',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _contentCard(String text) {
+    return SizedBox(
+      width: double.infinity,
+      child: Card(
+        color: AppColors.orangeLight,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            text,
+            style: txtStyle.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
         ),
       ),
     );

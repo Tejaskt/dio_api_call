@@ -2,6 +2,8 @@ import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_images.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import '../../core/routes/route_name.dart';
 import '../../core/storage/secure_storage.dart';
 
@@ -14,6 +16,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -52,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen>
      * Error :
      * If you try to use context after disposal, Flutter throws an error like:
      * “Looking up a deactivated widget's ancestor is unsafe”
-    */
 
     if (mounted) {
       if (token != null && token.isNotEmpty) {
@@ -60,6 +62,14 @@ class _SplashScreenState extends State<SplashScreen>
       } else {
         Navigator.pushReplacementNamed(context, RouteName.login);
       }
+    }
+    */
+
+    // No mounted check needed — Get.offAllNamed doesn't use context
+    if (token != null && token.isNotEmpty) {
+      Get.offAllNamed(RouteName.bottomNavigation);
+    } else {
+      Get.offAllNamed(RouteName.login);
     }
   }
 

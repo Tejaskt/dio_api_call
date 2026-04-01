@@ -1,4 +1,6 @@
+import 'package:dio_api_call/view/profile/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/core/storage/secure_storage.dart';
@@ -7,41 +9,8 @@ import 'package:dio_api_call/res/app_fonts.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 import 'package:dio_api_call/api/model/response/login_response.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends GetView<ProfileController> {
   const ProfileScreen({super.key});
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  LoginResponse? user;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    final userData = await SecureStorage.getUser();
-    setState(() {
-      user = userData;
-      isLoading = false;
-    });
-  }
-
-  void _logout() async {
-    await SecureStorage.clear();
-    if (mounted) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RouteName.login,
-        (route) => false,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,103 +21,117 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: AppColors.orangePrimary,
         foregroundColor: AppColors.white,
         actions: [
-          IconButton(onPressed: _logout, icon: const Icon(Icons.logout)),
+          IconButton(
+              onPressed: controller.logout, icon: const Icon(Icons.logout)),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : user == null
-          ? const Center(child: Text(AppStrings.userNotFound))
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 4.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.orangePrimary,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.user.value == null) {
+          return const Center(child: Text(AppStrings.userNotFound));
+        }
+
+        final user = controller.user.value!;
+
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: AppColors.orangePrimary,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 12.w,
+                      backgroundColor: AppColors.white,
+                      backgroundImage: NetworkImage(user.image),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      '${user.firstName} ${user.lastName}',
+                      style: AppFonts.latoRegular.copyWith(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 12.w,
-                          backgroundColor: AppColors.white,
-                          backgroundImage: NetworkImage(user!.image),
-                        ),
-                        SizedBox(height: 2.h),
-                        Text(
-                          '${user!.firstName} ${user!.lastName}',
-                          style: AppFonts.latoRegular.copyWith(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.white,
-                          ),
-                        ),
-                        Text(
-                          '@${user!.username}',
-                          style: AppFonts.latoRegular.copyWith(
-                            fontSize: 16.sp,
-                            color: AppColors.white70,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5.w),
-                    child: Column(
-                      children: [
-                        _buildInfoTile(
-                          Icons.numbers,
-                          AppStrings.userId,
-                          user!.id.toString(),
-                        ),
-                        _buildInfoTile(
-                          Icons.email,
-                          AppStrings.email,
-                          user!.email,
-                        ),
-                        _buildInfoTile(
-                          Icons.person,
-                          AppStrings.gender,
-                          user!.gender,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: ElevatedButton(
-                      onPressed: _logout,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.redAccent,
-                        minimumSize: Size(double.infinity, 5.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                      child: Text(
-                        AppStrings.logout,
-                        style: AppFonts.latoRegular.copyWith(
-                          fontSize: 16.sp,
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      '@${user.username}',
+                      style: AppFonts.latoRegular.copyWith(
+                        fontSize: 16.sp,
+                        color: AppColors.white70,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.all(5.w),
+                child: Column(
+                  children: [
+                    _buildInfoTile(
+                      Icons.numbers,
+                      AppStrings.userId,
+                      user.id.toString(),
+                    ),
+                    _buildInfoTile(
+                      Icons.email,
+                      AppStrings.email,
+                      user.email,
+                    ),
+                    _buildInfoTile(
+                      Icons.person,
+                      AppStrings.gender,
+                      user.gender,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: ElevatedButton(
+                  onPressed: controller.logout,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.redAccent,
+                    minimumSize: Size(double.infinity, 5.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  child: Text(
+                    AppStrings.logout,
+                    style: AppFonts.latoRegular.copyWith(
+                      fontSize: 16.sp,
+                      color: AppColors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 4.h)
+            ],
+          ),
+        );
+      }),
     );
   }
+}
 
-  Widget _buildInfoTile(IconData icon, String label, String value) {
+
+
+Widget _buildInfoTile(IconData icon, String label, String value) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 1.h),
       elevation: 2,
@@ -170,4 +153,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-}
+

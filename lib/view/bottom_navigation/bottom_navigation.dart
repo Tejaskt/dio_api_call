@@ -1,45 +1,39 @@
+import 'package:dio_api_call/view/bottom_navigation/bottom_navigation_controller.dart';
 import 'package:dio_api_call/view/home/home_screen.dart';
 import 'package:dio_api_call/view//profile/profile_screen.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class BottomNavigationView extends StatefulWidget {
-  const BottomNavigationView({super.key});
+class BottomNavigationView extends StatelessWidget {
+  BottomNavigationView({super.key});
 
-  @override
-  State<BottomNavigationView> createState() => _BottomNavigationViewState();
-}
+  // Looked up once as a field, not on every build()
+  final ctrl = Get.put(BottomNavigationController());
 
-class _BottomNavigationViewState extends State<BottomNavigationView> {
+  static const List<Widget> _pages = [HomeScreen(), ProfileScreen()];
 
-  int currentPage = 0;
-  List<Widget> pages = const [HomeScreen(), ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
+    return  Obx(() =>  (Scaffold(
 
-    return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: AppColors.white,
+            selectedItemColor: AppColors.orangePrimary,
+            currentIndex: ctrl.currentIndex.value,
+            onTap: ctrl.changePage,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+            ]
+        ),
 
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: AppColors.white,
-          onTap: (value){
-            setState(() {
-              currentPage = value;
-            });
-          },
-          selectedItemColor: AppColors.orangePrimary,
-          currentIndex: currentPage,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-          ]
-      ),
-
-      body: IndexedStack(
-        index: currentPage,
-        children: pages,
-      ),
+        body: IndexedStack(
+          index: ctrl.currentIndex.value,
+          children: _pages,
+        ),
+      )),
     );
   }
-
 }

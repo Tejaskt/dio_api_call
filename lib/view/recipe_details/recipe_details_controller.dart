@@ -1,29 +1,39 @@
 import 'package:dio_api_call/api/services/recipe_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../api/model/response/recipe_details_response.dart';
 
-class RecipeDetailsController extends ChangeNotifier {
-  final RecipeService _service;
+class RecipeDetailsController extends GetxController {
 
-  RecipeDetailsController(this._service);
+  final RecipeService _recipeService;
+  RecipeDetailsController(this._recipeService);
 
-  RecipeDetail? recipe;
-  bool isLoading = false;
-  String? error;
+ final recipe = Rxn<RecipeDetail>();
+  final isLoading = false.obs;
+  final errorMessage = ''.obs;
+
+  @override
+  void onInit(){
+    super.onInit();
+    // Get.arguments is how GetX passes data between routes.
+    // HomeScreen calls Get.toNamed(RouteName.recipeDetails, arguments: recipe.id)
+    // We read that id here — no constructor parameter needed on the screen.
+    final recipeId = Get.arguments as int;
+    fetchRecipe(recipeId);
+  }
 
   Future<void> fetchRecipe(int id) async {
-    isLoading = true;
-    error = null;
-    notifyListeners();
+    isLoading.value = true;
+    errorMessage.value = '';
 
     try {
-      recipe = await _service.getRecipeDetails(id);
+      recipe.value = await _recipeService.getRecipeDetails(id);
     } catch (e) {
-      error = e.toString();
+      errorMessage.value = e.toString();
+    }finally{
+      isLoading.value = false;
     }
 
-    isLoading = false;
-    notifyListeners();
   }
 }

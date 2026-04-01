@@ -1,8 +1,12 @@
 import 'package:dio_api_call/view/auth/login_binding.dart';
+import 'package:dio_api_call/view/profile/profile_binding.dart';
+import 'package:dio_api_call/view/recipe_details/recipe_details_binding.dart';
+import 'package:dio_api_call/view/recipe_details/recipe_details_screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../../core/routes/route_name.dart';
 import '../../view/bottom_navigation/bottom_navigation.dart';
+import '../../view/home/home_binding.dart';
 import '../../view/profile/profile_screen.dart';
 import '../../view/splash/splash_screen.dart';
 import '../../view/auth/login_screen.dart';
@@ -26,34 +30,49 @@ class AppRoutes {
     // SPLASH
     GetPage(
       name: RouteName.splash,
-      page: () => SplashScreen(),
-      //binding: ClientBottomNavBinding(),
-      //transition: Transition.rightToLeftWithFade,
+      page: () => const SplashScreen(),
+      transition: Transition.circularReveal,
     ),
 
     // LOGIN
     GetPage(
       name: RouteName.login,
-      page: () => LoginScreen(),
+      page: () => const LoginScreen(),
       binding: LoginBinding(),
     ),
 
     // HOME
     GetPage(
       name: RouteName.home,
-      page: () => HomeScreen(),
+      page: () => const HomeScreen(),
+      binding: HomeBinding()
+    ),
+
+    // RECIPE DETAILS
+    GetPage(
+      name: RouteName.recipeDetails,
+      page: () => const RecipeDetailScreen(),
+      binding: RecipeDetailsBinding()
     ),
 
     // PROFILE
     GetPage(
       name: RouteName.profile,
-      page: () => ProfileScreen(),
+      page: () => const ProfileScreen(),
+      binding: ProfileBinding()
     ),
 
     // BOTTOM NAVIGATION
     GetPage(
       name: RouteName.bottomNavigation,
       page: () => BottomNavigationView(),
+        // HomeBinding and ProfileBinding are registered here because
+        // BottomNavigationView hosts both screens simultaneously.
+        // BindingsBuilder.put lets you combine multiple bindings.
+      binding: BindingsBuilder(() {
+        HomeBinding().dependencies();
+        ProfileBinding().dependencies();
+      },)
     ),
   ];
 }

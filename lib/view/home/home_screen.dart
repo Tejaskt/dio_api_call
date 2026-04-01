@@ -1,63 +1,68 @@
 import 'package:dio_api_call/core/component/shimmer_effect.dart';
+import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/view/home/home_controller.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../api/api_client.dart';
 import '../../api/model/response/recipe_response.dart';
-import '../../api/services/recipe_service.dart';
 import '../recipe_details/recipe_details_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-
-  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HomeController(RecipeService(apiClient.dio))..getRecipe(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(AppStrings.home),
-          centerTitle: true,
-          backgroundColor: AppColors.orangePrimary,
-          foregroundColor: AppColors.white,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(AppStrings.home),
+        centerTitle: true,
+        backgroundColor: AppColors.orangePrimary,
+        foregroundColor: AppColors.white,
+      ),
 
-        body: Consumer<HomeController>(
-          builder: (context, vm, _) {
-            if (vm.isLoading) {
-              return const ShimmerEffect();
-              //return const Center(child: CircularProgressIndicator());
-            }
+      body: Obx(() {
 
-            if (vm.error != null) {
-              return Center(child: Text(vm.error!));
-            }
+          if (controller.isLoading.value) {
+            return const ShimmerEffect();
+            //return const Center(child: CircularProgressIndicator());
+          }
 
-            return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              //padding: EdgeInsets.symmetric(horizontal : 5.w, vertical: 4.h),
-              itemCount: vm.recipes.length,
-              itemBuilder: (context, index) {
-                return recipeCard(recipe: vm.recipes[index],context: context);
-              },
+          if (controller.errorMessage.value.isNotEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(controller.errorMessage.value),
+                  SizedBox(height: 2.h),
+                  ElevatedButton(
+                    onPressed: controller.fetchRecipes,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
             );
-          },
-        ),
+          }
+
+
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            //padding: EdgeInsets.symmetric(horizontal : 5.w, vertical: 4.h),
+            itemCount: controller.recipes.length,
+            itemBuilder: (context, index) {
+              return recipeCard(recipe: controller.recipes[index]);
+            },
+          );
+        },
       ),
     );
   }
 }
 
-Widget recipeCard({required Recipe recipe, required BuildContext context}) {
+
+Widget recipeCard({required Recipe recipe}) {
   final totalTime = recipe.prepTime + recipe.cookTime;
 
   return Container(
@@ -72,15 +77,12 @@ Widget recipeCard({required Recipe recipe, required BuildContext context}) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
         // Image
         GestureDetector(
           onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => RecipeDetailScreen(recipeId: recipe.id),
-              ),
-            );
+            // RecipeDetailBinding reads id in onInit via Get.arguments.
+            Get.toNamed(RouteName.recipeDetails,arguments: recipe.id);
           },
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),

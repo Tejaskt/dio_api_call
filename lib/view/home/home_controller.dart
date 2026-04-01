@@ -1,29 +1,39 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../../api/model/response/recipe_response.dart';
 import '../../api/services/recipe_service.dart';
 
-class HomeController extends ChangeNotifier {
-  final RecipeService _recipeApi;
+class HomeController extends GetxController {
 
-  HomeController(this._recipeApi);
+  final RecipeService _recipeService;
+  HomeController(this._recipeService);
 
-  List<Recipe> recipes = [];
-  bool isLoading = false;
-  String? error;
+  // RxList - the ui reacts when items are added/cleared
+  final recipes = <Recipe>[].obs;
+  final isLoading = false.obs;
+  final errorMessage = ''.obs;
 
-  Future<void> getRecipe() async{
-    isLoading = true;
-    error = null;
-    notifyListeners();
+  // onInit is called automatically by GetX after the controller
+  // is put into memory. Replaces the old ..getRecipe() call-chain
+  // you had on ChangeNotifierProvider's create:
+  @override
+  void onInit() {
+    super.onInit();
+    fetchRecipes();
+  }
+
+  Future<void> fetchRecipes() async{
+    isLoading.value = true;
+    errorMessage.value = '';
 
     try{
-      recipes = await _recipeApi.getRecipe();
+      final result = await _recipeService.getRecipe();
+      recipes.assignAll(result);
     }catch(e){
-      error = e.toString();
+      errorMessage.value = e.toString();
+    }finally{
+      isLoading.value = false;
     }
-
-    isLoading = false;
-    notifyListeners();
   }
 }
