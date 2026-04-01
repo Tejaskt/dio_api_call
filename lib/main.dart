@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
             )
           ),
           initialRoute: RouteName.splash,
-          getPages: AppRoutes.appRoutes(),
+          getPages: AppRoutes.appRoutes ,
         );
       },
     );

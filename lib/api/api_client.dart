@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:dio_api_call/core/routes/route_name.dart';
+import 'package:get/get.dart';
 import 'api_end_point.dart';
 import '../../../core/storage/secure_storage.dart';
 
@@ -54,6 +56,8 @@ class APIClient {
       onError: (DioException e, handler) async {
         if (e.response?.statusCode == 401) {
           await SecureStorage.clear();
+          // Redirect to login and clear the entire navigation stack
+          Get.offAllNamed(RouteName.login);
         }
         return handler.next(e);
       },
