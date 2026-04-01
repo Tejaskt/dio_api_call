@@ -8,7 +8,7 @@ class ShimmerEffect extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: 6,
-      itemBuilder: (_, __) {
+      itemBuilder: (_, _) {
         return Shimmer.fromColors(
           baseColor: Colors.grey.shade300,
           highlightColor: Colors.grey.shade100,

@@ -1,5 +1,4 @@
 import 'package:dio_api_call/api/services/recipe_service.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../api/model/response/recipe_details_response.dart';

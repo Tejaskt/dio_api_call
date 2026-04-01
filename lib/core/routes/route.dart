@@ -3,7 +3,6 @@ import 'package:dio_api_call/view/profile/profile_binding.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_binding.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_screen.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../../core/routes/route_name.dart';
 import '../../view/bottom_navigation/bottom_navigation.dart';
 import '../../view/home/home_binding.dart';

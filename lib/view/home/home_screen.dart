@@ -5,10 +5,8 @@ import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../api/model/response/recipe_response.dart';
-import '../recipe_details/recipe_details_screen.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
