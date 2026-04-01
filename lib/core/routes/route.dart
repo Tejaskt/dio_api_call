@@ -2,6 +2,7 @@ import 'package:dio_api_call/view/auth/login_binding.dart';
 import 'package:dio_api_call/view/profile/profile_binding.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_binding.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_screen.dart';
+import 'package:dio_api_call/view/splash/splash_binding.dart';
 import 'package:get/get.dart';
 import '../../core/routes/route_name.dart';
 import '../../view/bottom_navigation/bottom_navigation.dart';
@@ -30,7 +31,7 @@ class AppRoutes {
     GetPage(
       name: RouteName.splash,
       page: () => const SplashScreen(),
-      transition: Transition.circularReveal,
+      binding: SplashBinding(),
     ),
 
     // LOGIN

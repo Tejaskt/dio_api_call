@@ -1,83 +1,12 @@
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_images.dart';
 import 'package:dio_api_call/res/app_strings.dart';
+import 'package:dio_api_call/view/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import '../../core/routes/route_name.dart';
-import '../../core/storage/secure_storage.dart';
+import 'package:get/get.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends GetView<SplashController> {
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.92, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
-
-    _controller.forward();
-
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    // Wait for animation to play a bit
-    await Future.delayed(const Duration(seconds: 2));
-    
-    final token = await SecureStorage.getToken();
-
-    /* What mounted does
-     * mounted == true → widget is still in the tree → safe to use context
-     * Error :
-     * If you try to use context after disposal, Flutter throws an error like:
-     * “Looking up a deactivated widget's ancestor is unsafe”
-
-    if (mounted) {
-      if (token != null && token.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, RouteName.bottomNavigation);
-      } else {
-        Navigator.pushReplacementNamed(context, RouteName.login);
-      }
-    }
-    */
-
-    // No mounted check needed — Get.offAllNamed doesn't use context
-    if (token != null && token.isNotEmpty) {
-      Get.offAllNamed(RouteName.bottomNavigation);
-    } else {
-      Get.offAllNamed(RouteName.login);
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,20 +28,21 @@ class _SplashScreenState extends State<SplashScreen>
                   AppColors.orangeLight,
                   AppColors.orangeDark,
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                begin: .topCenter,
+                end: .bottomCenter,
               ),
             ),
             child: Center(
               child: FadeTransition(
-                opacity: _fadeAnimation,
+                opacity: controller.fadeAnimation,
                 child: ScaleTransition(
-                  scale: _scaleAnimation,
+                  scale: controller.scaleAnimation,
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 420),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: .center,
                       children: [
+
                         // logo container
                         Container(
                           width: iconSize,
