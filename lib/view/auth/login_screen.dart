@@ -2,6 +2,7 @@ import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_fonts.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../res/app_images.dart';
@@ -9,7 +10,7 @@ import 'login_controller.dart';
 
 class LoginScreen extends GetView<LoginController> {
   const LoginScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +75,9 @@ class LoginScreen extends GetView<LoginController> {
                         width: double.infinity,
                         child: ElevatedButton(
                           // No more async here — controller handles everything
-                          onPressed: controller.isLoading.value ? null : controller.login,
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : controller.login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.orangePrimary,
                             disabledBackgroundColor: AppColors.orangePrimary
@@ -103,6 +106,23 @@ class LoginScreen extends GetView<LoginController> {
                                 ),
                         ),
                       ),
+
+                      SizedBox(height: 2.h),
+
+                      //Expanded(child: SvgPicture.asset(AppImages.continueWithGoogle)),
+
+                      // Google icon
+                      Row(
+                        spacing: 5.w,
+                        mainAxisAlignment: .center,
+                        children: [
+                          SvgPicture.asset(AppImages.googleIcon),
+                          SvgPicture.asset(AppImages.facebookIcon),
+                        ],
+                      ),
+
+                      SizedBox(height: 2.h),
+
 
                       if (controller.errorMessage.value.isNotEmpty)
                         Padding(
@@ -165,4 +185,3 @@ Widget _buildInputField({
     ),
   );
 }
-
