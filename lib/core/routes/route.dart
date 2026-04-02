@@ -1,4 +1,5 @@
 import 'package:dio_api_call/view/auth/login_binding.dart';
+import 'package:dio_api_call/view/bottom_navigation/bottom_navigation_binding.dart';
 import 'package:dio_api_call/view/profile/profile_binding.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_binding.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_screen.dart';
@@ -69,10 +70,7 @@ class AppRoutes {
         // HomeBinding and ProfileBinding are registered here because
         // BottomNavigationView hosts both screens simultaneously.
         // BindingsBuilder.put lets you combine multiple bindings.
-      binding: BindingsBuilder(() {
-        HomeBinding().dependencies();
-        ProfileBinding().dependencies();
-      },)
+      binding: BottomNavigationBinding()
     ),
   ];
 }

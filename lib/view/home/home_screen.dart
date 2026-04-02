@@ -31,7 +31,7 @@ class HomeScreen extends GetView<HomeController> {
           if (controller.errorMessage.value.isNotEmpty) {
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
                   Text(controller.errorMessage.value),
                   SizedBox(height: 2.h),
@@ -101,7 +101,7 @@ Widget recipeCard({required Recipe recipe}) {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               mainAxisAlignment: .spaceBetween,
               children: [
                 // Name
@@ -109,14 +109,14 @@ Widget recipeCard({required Recipe recipe}) {
                   recipe.name,
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: .bold,
                   ),
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: .spaceBetween,
                   children: [
                     // Rating
                     Row(
