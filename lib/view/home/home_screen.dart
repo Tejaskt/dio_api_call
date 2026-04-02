@@ -37,7 +37,7 @@ class HomeScreen extends GetView<HomeController> {
                   SizedBox(height: 2.h),
                   ElevatedButton(
                     onPressed: controller.fetchRecipes,
-                    child: const Text('Retry'),
+                    child: const Text(AppStrings.retry),
                   ),
                 ],
               ),

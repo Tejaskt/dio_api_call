@@ -1,4 +1,6 @@
 import 'package:dio_api_call/core/component/shimmer_effect.dart';
+import 'package:dio_api_call/res/app_fonts.dart';
+import 'package:dio_api_call/res/app_strings.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,12 +9,6 @@ import '../../res/app_colors.dart';
 
 class RecipeDetailScreen extends GetView<RecipeDetailsController> {
   const RecipeDetailScreen({super.key});
-
-  static final txtStyle = TextStyle(
-    fontFamily: 'Lato',
-    fontSize: 18.sp,
-    fontWeight: .bold,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -63,45 +59,45 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: .spaceBetween,
                       children: [
                         _infoBox(
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: .center,
                             children: [
                               Icon(Icons.star,
                                   color: AppColors.orange, size: 18),
                               const SizedBox(width: 8),
-                              Text('${recipe.rating}', style: txtStyle),
+                              Text('${recipe.rating}', style: AppFonts.txtStyle),
                             ],
                           ),
                         ),
                         _infoBox(
                           Center(
-                            child: Text('$totalTime min', style: txtStyle),
+                            child: Text('$totalTime min', style: AppFonts.txtStyle),
                           ),
                         ),
                         _infoBox(
                           Center(
                             child: Text(
                               '${recipe.servings} servings',
-                              style: txtStyle,
+                              style: AppFonts.txtStyle,
                             ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    _sectionChip('Ingredients'),
+                    _sectionChip(AppStrings.ingredients),
                     const SizedBox(height: 8),
                     ...recipe.ingredients.map(
                           (e) => _contentCard('• $e'),
                     ),
                     const SizedBox(height: 16),
-                    _sectionChip('Instructions'),
+                    _sectionChip(AppStrings.instructions),
                     const SizedBox(height: 8),
                     ...recipe.instructions.asMap().entries.map(
                           (entry) => _contentCard(
@@ -136,10 +132,8 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
       child: Chip(
         label: Text(
           label,
-          style: const TextStyle(
-            fontFamily: 'Lato',
+          style: AppFonts.txtStyle.copyWith(
             fontSize: 18,
-            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -155,7 +149,7 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             text,
-            style: txtStyle.copyWith(
+            style: AppFonts.txtStyle.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.normal,
             ),

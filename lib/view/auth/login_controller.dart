@@ -1,11 +1,13 @@
 import 'package:dio_api_call/api/services/auth_service.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/core/storage/secure_storage.dart';
+import 'package:dio_api_call/res/app_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../api/model/request/login_request.dart';
 
 class LoginController extends GetxController {
+
   /// TextEditingControllers live here so they survive widget rebuilds
   /// and are disposed properly in onClose()
   final usernameController = TextEditingController();
@@ -43,7 +45,7 @@ class LoginController extends GetxController {
     final password = passwordController.text.trim();
 
     if (username.isEmpty || password.isEmpty) {
-      errorMessage.value = 'Please enter username and password';
+      errorMessage.value = AppStrings.loginFieldEmpty;
       return;
     }
 

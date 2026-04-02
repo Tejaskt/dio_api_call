@@ -16,9 +16,17 @@ class AppStrings {
 
   // Home Screen
   static const String home = 'Home';
+  static const String retry = 'Retry';
+
+  // Recipe Details Screen
+  static const String ingredients = 'Ingredients';
+  static const String instructions = 'Instructions';
 
   /// HINT
   static const String enterUsername = 'Username';
   static const String enterPassword = 'Password';
+
+  /// error messages
+ static const String loginFieldEmpty  = 'Please enter username and password';
 
 }

@@ -4,15 +4,12 @@ import 'package:dio_api_call/view//profile/profile_screen.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../res/app_strings.dart';
 
-class BottomNavigationView extends StatelessWidget {
-  BottomNavigationView({super.key});
-
-  // Looked up once as a field, not on every build()
-  final ctrl = Get.put(BottomNavigationController());
+class BottomNavigationView extends GetView<BottomNavigationController> {
+  const BottomNavigationView({super.key});
 
   static const List<Widget> _pages = [HomeScreen(), ProfileScreen()];
-
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +18,16 @@ class BottomNavigationView extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
             backgroundColor: AppColors.white,
             selectedItemColor: AppColors.orangePrimary,
-            currentIndex: ctrl.currentIndex.value,
-            onTap: ctrl.changePage,
+            currentIndex: controller.currentIndex.value,
+            onTap: controller.changePage,
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: AppStrings.home),
+              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: AppStrings.profile),
             ]
         ),
 
         body: IndexedStack(
-          index: ctrl.currentIndex.value,
+          index: controller.currentIndex.value,
           children: _pages,
         ),
       )),

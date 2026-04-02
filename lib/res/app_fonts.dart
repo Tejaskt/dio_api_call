@@ -7,11 +7,17 @@ class AppFonts {
   /// ------ Private internal constructor ------
   AppFonts._i();
 
-  final String lato = "Lato";
-
   static TextStyle latoRegular = TextStyle (
    color: AppColors.black,
    fontSize: 14.sp
   );
+
+  static final txtStyle = TextStyle(
+    fontFamily: 'Lato',
+    fontSize: 18.sp,
+    fontWeight: .bold,
+  );
+
+
 }
 

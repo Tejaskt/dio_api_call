@@ -7,11 +7,9 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../res/app_images.dart';
 import 'login_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends GetView<LoginController> {
   const LoginScreen({super.key});
-
-  LoginController get ctrl => Get.find<LoginController>();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                 _buildInputField(
                   icon: Icons.person_outline,
                   hint: AppStrings.enterUsername,
-                  controller: ctrl.usernameController,
+                  controller: controller.usernameController,
                   isPassword: false,
                 ),
                 SizedBox(height: 3.h),
@@ -57,10 +55,10 @@ class LoginScreen extends StatelessWidget {
                   () => _buildInputField(
                     icon: Icons.lock_outline,
                     hint: AppStrings.enterPassword,
-                    controller: ctrl.passwordController,
+                    controller: controller.passwordController,
                     isPassword: true,
-                    isVisible: ctrl.isPasswordVisible.value,
-                    onToggleVisibility: ctrl.togglePasswordVisibility,
+                    isVisible: controller.isPasswordVisible.value,
+                    onToggleVisibility: controller.togglePasswordVisibility,
                   ),
                 ),
 
@@ -76,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           // No more async here — controller handles everything
-                          onPressed: ctrl.isLoading.value ? null : ctrl.login,
+                          onPressed: controller.isLoading.value ? null : controller.login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.orangePrimary,
                             disabledBackgroundColor: AppColors.orangePrimary
@@ -86,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(50),
                             ),
                           ),
-                          child: ctrl.isLoading.value
+                          child: controller.isLoading.value
                               ? const SizedBox(
                                   width: 22,
                                   height: 22,
@@ -106,11 +104,11 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
 
-                      if (ctrl.errorMessage.value.isNotEmpty)
+                      if (controller.errorMessage.value.isNotEmpty)
                         Padding(
                           padding: EdgeInsets.only(top: 2.h),
                           child: Text(
-                            ctrl.errorMessage.value,
+                            controller.errorMessage.value,
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: AppColors.red),
                           ),
@@ -168,46 +166,3 @@ Widget _buildInputField({
   );
 }
 
-/*
-Widget inputField(
-  IconData icon,
-  String hintText,
-  TextEditingController controller, {
-  required bool isPassword,
-}) {
-  return TextField(
-    controller: controller,
-    obscureText: isPassword ? isPasswordVisible : false,
-    style: AppFonts.latoRegular.copyWith(color: AppColors.orangeDark),
-    decoration: InputDecoration(
-      prefixIcon: Icon(icon, color: AppColors.orangeDark),
-      hintText: hintText,
-      suffixIcon: isPassword
-          ? IconButton(
-              onPressed: () {
-                setState(() {
-                  isPasswordVisible = !isPasswordVisible;
-                });
-              },
-              icon: Icon(
-                isPasswordVisible
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-                color: AppColors.orangeDark,
-              ),
-            )
-          : null,
-      hintStyle: TextStyle(color: AppColors.orangeDark),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.orangePrimary),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.orangePrimary, width: 2),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      contentPadding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-    ),
-  );
-}
- */

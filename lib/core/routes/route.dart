@@ -65,7 +65,7 @@ class AppRoutes {
     // BOTTOM NAVIGATION
     GetPage(
       name: RouteName.bottomNavigation,
-      page: () => BottomNavigationView(),
+      page: () => const BottomNavigationView(),
         // HomeBinding and ProfileBinding are registered here because
         // BottomNavigationView hosts both screens simultaneously.
         // BindingsBuilder.put lets you combine multiple bindings.
