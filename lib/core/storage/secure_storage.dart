@@ -40,8 +40,6 @@ class SecureStorage {
 
   // --- Firebase integration --- \\
 
-// Add these methods alongside your existing saveToken/getToken/saveUser/getUser
-
   static const _firebaseUserKey = 'firebase_user';
 
   static Future<void> saveFirebaseUser(FirebaseUser user) async {

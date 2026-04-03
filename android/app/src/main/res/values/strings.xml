@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Recipefy</string>
+    <string name="facebook_app_id">1665771971253793</string>
+    <string name="fb_login_protocol_scheme">fb1665771971253793</string>
+    <string name="facebook_client_token">e2dcf27654c92abab8c80bdb523bd996</string>
+</resources>

@@ -8,6 +8,7 @@ class AppStrings {
   static const String login = 'Log In';
   static const String welcomeString = 'Welcome Back!';
   static const String continueWithGoogle = 'Continue with Google';
+  static const String continueWithFacebook = 'Continue with Facebook';
 
   // Profile Screen
   static const String profile = 'Profile';

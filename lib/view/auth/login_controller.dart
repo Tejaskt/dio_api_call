@@ -62,7 +62,6 @@ class LoginController extends GetxController {
 
       await SecureStorage.saveToken(user.accessToken);
       await SecureStorage.saveUser(user);
-
       // navigation should stay only here not in screen
       Get.offAllNamed(RouteName.bottomNavigation);
 
@@ -79,6 +78,21 @@ class LoginController extends GetxController {
 
     try {
       final firebaseUser = await _authService.signInWithGoogle();
+      await SecureStorage.saveFirebaseUser(firebaseUser);
+      Get.offAllNamed(RouteName.bottomNavigation);
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // --- FACEBOOK SIGN-IN ---
+  Future<void> signInWithFacebook() async {
+    _setLoading(true);
+
+    try {
+      final firebaseUser = await _authService.signInWithFacebook();
       await SecureStorage.saveFirebaseUser(firebaseUser);
       Get.offAllNamed(RouteName.bottomNavigation);
     } catch (e) {

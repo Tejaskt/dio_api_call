@@ -111,7 +111,7 @@ class LoginScreen extends GetView<LoginController> {
 
                       // --- DIVIDER ---
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 3.h),
+                        padding: EdgeInsets.symmetric(vertical: 2.h),
                         child: Row(
                           children: [
                             const Expanded(child: Divider()),
@@ -148,6 +148,32 @@ class LoginScreen extends GetView<LoginController> {
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.symmetric(vertical: 1.5.h),
                             side: BorderSide(color: AppColors.orangePrimary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 2.h),
+
+                      // --- FACEBOOK BUTTON ---
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: controller.isLoading.value ? null : controller.signInWithFacebook,
+                          icon: const Icon(Icons.facebook, color: AppColors.white, size: 22),
+                          label: Text(
+                            AppStrings.continueWithFacebook,
+                            style: AppFonts.latoRegular.copyWith(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1877F2),
+                            padding: EdgeInsets.symmetric(vertical: 1.5.h),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50),
                             ),

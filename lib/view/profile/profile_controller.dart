@@ -1,17 +1,14 @@
-import 'package:dio_api_call/api/model/common/firebase_user.dart';
 import 'package:get/get.dart';
-
-import '../../api/model/response/login_response.dart';
 import '../../api/services/auth_service.dart';
 import '../../core/routes/route_name.dart';
 import '../../core/storage/secure_storage.dart';
 
 class ProfileController extends GetxController {
-
   // Rx<T> wraps any nullable type reactively
-  final user = Rxn<LoginResponse>(); // Rxn = nullable Rx — starts as null
+  final user = Rxn<dynamic>(); // Rxn = nullable Rx — starts as null
   final isLoading = true.obs;
-  final firebaseUser = Rxn<FirebaseUser>();
+  //final firebaseUser = Rxn<FirebaseUser>();
+  RxBool userLoggedInUsingFirebase = false.obs;
 
   @override
   void onInit() {
@@ -21,8 +18,13 @@ class ProfileController extends GetxController {
 
   Future<void> loadUser() async {
     isLoading.value = true;
-    user.value = await SecureStorage.getUser();
-    firebaseUser.value = await SecureStorage.getFirebaseUser();
+
+    if (userLoggedInUsingFirebase.value) {
+      user.value = await SecureStorage.getFirebaseUser();
+    } else {
+      userLoggedInUsingFirebase.value = false;
+      user.value = await SecureStorage.getUser();
+    }
     isLoading.value = false;
   }
 

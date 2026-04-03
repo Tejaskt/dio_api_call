@@ -19,7 +19,9 @@ class ProfileScreen extends GetView<ProfileController> {
         foregroundColor: AppColors.white,
         actions: [
           IconButton(
-              onPressed: controller.logout, icon: const Icon(Icons.logout)),
+            onPressed: controller.logout,
+            icon: const Icon(Icons.logout),
+          ),
         ],
       ),
       body: Obx(() {
@@ -32,11 +34,18 @@ class ProfileScreen extends GetView<ProfileController> {
         //   return const Center(child: Text(AppStrings.userNotFound));
         // }
 
-        final user = controller.firebaseUser.value;//controller.user.value ?? controller.firebaseUser.value;
+        dynamic user = controller.user.value;
+        /*
+        if (controller.userLoggedInUsingFirebase.value) {
+          user = controller.user.value;
+        } else {
+          user ??= controller.user.value;
+        }
+        */
+
         return SingleChildScrollView(
           child: Column(
             children: [
-
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 4.h),
@@ -52,11 +61,13 @@ class ProfileScreen extends GetView<ProfileController> {
                     CircleAvatar(
                       radius: 12.w,
                       backgroundColor: AppColors.white,
-                      backgroundImage: NetworkImage(user!.image),
+                      backgroundImage: NetworkImage(user.image),
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      user.provider,//'${user.firstName } ${user.lastName}',
+                      controller.userLoggedInUsingFirebase.value
+                          ? user.name
+                          : '${user.firstName} ${user.lastName}',
                       style: AppFonts.latoRegular.copyWith(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
@@ -64,7 +75,9 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                     ),
                     Text(
-                       user.name,//'@${user.username}',
+                      controller.userLoggedInUsingFirebase.value
+                          ? user.provider
+                          : '@${user.username}',
                       style: AppFonts.latoRegular.copyWith(
                         fontSize: 16.sp,
                         color: AppColors.white70,
@@ -80,20 +93,17 @@ class ProfileScreen extends GetView<ProfileController> {
                     _buildInfoTile(
                       Icons.numbers,
                       AppStrings.userId,
-                      user.uid.toString(),
+                      controller.userLoggedInUsingFirebase.value ? user.uid.toString() : user.id.toString(),
                     ),
-                    _buildInfoTile(
-                      Icons.email,
-                      AppStrings.email,
-                      user.email,
-                    ),
-                    /*
-                    _buildInfoTile(
-                      Icons.person,
-                      AppStrings.gender,
-                      user.gender,
-                    ),
-                     */
+                    _buildInfoTile(Icons.email, AppStrings.email, user.email),
+
+                    controller.userLoggedInUsingFirebase.value
+                        ? SizedBox.shrink()
+                        : _buildInfoTile(
+                            Icons.person,
+                            AppStrings.gender,
+                            user.gender,
+                          ),
                   ],
                 ),
               ),
@@ -119,7 +129,7 @@ class ProfileScreen extends GetView<ProfileController> {
                   ),
                 ),
               ),
-              SizedBox(height: 4.h)
+              SizedBox(height: 4.h),
             ],
           ),
         );
@@ -128,28 +138,25 @@ class ProfileScreen extends GetView<ProfileController> {
   }
 }
 
-
-
 Widget _buildInfoTile(IconData icon, String label, String value) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 1.h),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: ListTile(
-        leading: Icon(icon, color: AppColors.orangePrimary),
-        title: Text(
-          label,
-          style: TextStyle(fontSize: 14.sp, color: AppColors.listTileLabel),
-        ),
-        subtitle: Text(
-          value,
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
-            color: AppColors.black,
-          ),
+  return Card(
+    margin: EdgeInsets.symmetric(vertical: 1.h),
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    child: ListTile(
+      leading: Icon(icon, color: AppColors.orangePrimary),
+      title: Text(
+        label,
+        style: TextStyle(fontSize: 14.sp, color: AppColors.listTileLabel),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+          color: AppColors.black,
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}

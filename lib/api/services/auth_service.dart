@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/error/app_exception.dart';
 import '../api_end_point.dart';
@@ -42,7 +43,7 @@ class AuthService {
 
       // Get the auth tokens from google
       final GoogleSignInAuthentication googleAuth =
-          await googleAccount.authentication;
+      await googleAccount.authentication;
 
       // Build a firebase credential from those tokens
       final OAuthCredential credential = GoogleAuthProvider.credential(
@@ -64,13 +65,51 @@ class AuthService {
     }
   }
 
+  // --- FACEBOOK SIGN-IN ---
+  Future<FirebaseUser> signInWithFacebook() async {
+    try {
+      // Opens the Facebook login dialog
+      final LoginResult loginResult = await FacebookAuth.instance.login(
+        permissions: ['email', 'public_profile'],
+      );
+
+      // User cancelled or it failed
+      if (loginResult.status == LoginStatus.cancelled) {
+        throw AppException('Facebook sign-in was cancelled');
+      }
+      if (loginResult.status == LoginStatus.failed) {
+        throw AppException('Facebook sign-in failed: ${loginResult.message}');
+      }
+
+      // Build a Firebase credential from the Facebook token
+      final OAuthCredential credential = FacebookAuthProvider.credential(
+        loginResult.accessToken!.tokenString,
+      );
+
+      final UserCredential userCredential =
+      await _firebaseAuth.signInWithCredential(credential);
+
+      return _mapFirebaseUser(userCredential.user!);
+    } on FirebaseAuthException catch (e) {
+      throw AppException(_firebaseErrorMessage(e.code));
+    } catch (e) {
+      if (e is AppException) rethrow;
+      throw AppException('Facebook sign-in failed. Please try again.');
+    }
+  }
+
   // --- SIGN OUT (covers all providers) ---
   Future<void> signOut() async {
-    await Future.wait([
-      _firebaseAuth.signOut(),
-      _googleSignIn.signOut(),
-      // Facebook auto-clears on FirebaseAuth.signOut()
-    ]);
+    try {
+      await Future.wait([
+
+        _firebaseAuth.signOut(),
+        _googleSignIn.signOut(),
+        // Facebook auto-clears on FirebaseAuth.signOut()
+      ]);
+    } catch (e) {
+      throw AppException('Sign-out Error :$e');
+    }
   }
 
   // --- HELPERS --- \\
@@ -103,3 +142,27 @@ class AuthService {
     }
   }
 }
+
+/* facebook login user response
+User(
+displayName: Tejas Kanazriya,
+email: tejaskanjariya82547@gmail.com,
+isEmailVerified: false,
+isAnonymous: false,
+metadata:
+      UserMetadata(
+          creationTime: 2026-04-03 06:05:45.600Z,
+          lastSignInTime: 2026-04-03 06:24:00.703Z),
+          phoneNumber: null,
+          photoURL: https://graph.facebook.com/2401364983704158/picture,
+          providerData,
+        [UserInfo(
+          displayName: Tejas Kanazriya,
+          email: tejaskanjariya82547@gmail.com,
+          phoneNumber: null,
+          photoURL: https://graph.facebook.com/2401364983704158/picture,
+          providerId: facebook.com,
+          uid: 2401364983704158)],
+    refreshToken: null, tenantId: null, uid: hTm7M95HSMRBnTjri33wMn0b1kZ2)
+
+ */
