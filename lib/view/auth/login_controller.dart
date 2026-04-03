@@ -39,6 +39,7 @@ class LoginController extends GetxController {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
+  // Dummy json auth api login
   Future<void> login() async {
     // validate before hitting the network
     final username = usernameController.text.trim();
@@ -71,4 +72,25 @@ class LoginController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // --- GOOGLE SIGN-IN ---
+  Future<void> signInWithGoogle() async {
+    _setLoading(true);
+
+    try {
+      final firebaseUser = await _authService.signInWithGoogle();
+      await SecureStorage.saveFirebaseUser(firebaseUser);
+      Get.offAllNamed(RouteName.bottomNavigation);
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  void _setLoading(bool value) {
+    isLoading.value = value;
+    if (value) errorMessage.value = '';
+  }
 }
+

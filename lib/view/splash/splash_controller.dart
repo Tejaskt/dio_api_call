@@ -54,9 +54,15 @@ class SplashController extends GetxController
   Future<void> _checkLoginStatus() async {
     await Future.delayed(const Duration(seconds: 2));
 
+    // Check dummy-json token (email login)
     final token = await SecureStorage.getToken();
 
-    if (token != null && token.isNotEmpty) {
+    // Check Firebase User(Google / facebook)
+    final firebaseUser = await SecureStorage.getFirebaseUser();
+
+    final isLoggedIn = (token != null && token.isNotEmpty) || (firebaseUser != null);
+
+    if (isLoggedIn) {
       Get.offAllNamed(RouteName.bottomNavigation);
     } else {
       Get.offAllNamed(RouteName.login);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../api/model/common/firebase_user.dart';
 import '../../api/model/response/login_response.dart';
 
 class SecureStorage {
@@ -33,5 +34,27 @@ class SecureStorage {
   static Future<void> clear() async {
     await _storage.delete(key: _tokenKey);
     await _storage.delete(key: _userKey);
+    await _storage.delete(key: _firebaseUserKey);
+
   }
+
+  // --- Firebase integration --- \\
+
+// Add these methods alongside your existing saveToken/getToken/saveUser/getUser
+
+  static const _firebaseUserKey = 'firebase_user';
+
+  static Future<void> saveFirebaseUser(FirebaseUser user) async {
+    await _storage.write(
+      key: _firebaseUserKey,
+      value: jsonEncode(user.toJson()),
+    );
+  }
+
+  static Future<FirebaseUser?> getFirebaseUser() async {
+    final str = await _storage.read(key: _firebaseUserKey);
+    if (str != null) return FirebaseUser.fromJson(jsonDecode(str));
+    return null;
+  }
+
 }

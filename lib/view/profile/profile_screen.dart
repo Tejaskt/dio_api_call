@@ -27,12 +27,12 @@ class ProfileScreen extends GetView<ProfileController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.user.value == null) {
-          return const Center(child: Text(AppStrings.userNotFound));
-        }
+        // make proper flow of showing user data into profile screen.
+        // if (controller.user.value == null) {
+        //   return const Center(child: Text(AppStrings.userNotFound));
+        // }
 
-        final user = controller.user.value!;
-
+        final user = controller.firebaseUser.value;//controller.user.value ?? controller.firebaseUser.value;
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -52,11 +52,11 @@ class ProfileScreen extends GetView<ProfileController> {
                     CircleAvatar(
                       radius: 12.w,
                       backgroundColor: AppColors.white,
-                      backgroundImage: NetworkImage(user.image),
+                      backgroundImage: NetworkImage(user!.image),
                     ),
                     SizedBox(height: 2.h),
                     Text(
-                      '${user.firstName} ${user.lastName}',
+                      user.provider,//'${user.firstName } ${user.lastName}',
                       style: AppFonts.latoRegular.copyWith(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                     ),
                     Text(
-                      '@${user.username}',
+                       user.name,//'@${user.username}',
                       style: AppFonts.latoRegular.copyWith(
                         fontSize: 16.sp,
                         color: AppColors.white70,
@@ -80,18 +80,20 @@ class ProfileScreen extends GetView<ProfileController> {
                     _buildInfoTile(
                       Icons.numbers,
                       AppStrings.userId,
-                      user.id.toString(),
+                      user.uid.toString(),
                     ),
                     _buildInfoTile(
                       Icons.email,
                       AppStrings.email,
                       user.email,
                     ),
+                    /*
                     _buildInfoTile(
                       Icons.person,
                       AppStrings.gender,
                       user.gender,
                     ),
+                     */
                   ],
                 ),
               ),

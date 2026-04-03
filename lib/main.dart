@@ -1,3 +1,5 @@
+import 'package:dio_api_call/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -5,7 +7,14 @@ import 'package:dio_api_call/core/routes/route.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase - uses the generated firebase_option.dart
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 

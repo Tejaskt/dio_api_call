@@ -3,8 +3,11 @@ class AppStrings {
 
   static const String appName = 'Recipify';
   static const String appMoto = 'Discover Delicious Recipes';
+
+  // Login Screen
   static const String login = 'Log In';
   static const String welcomeString = 'Welcome Back!';
+  static const String continueWithGoogle = 'Continue with Google';
 
   // Profile Screen
   static const String profile = 'Profile';

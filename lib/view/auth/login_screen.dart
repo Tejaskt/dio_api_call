@@ -109,20 +109,53 @@ class LoginScreen extends GetView<LoginController> {
 
                       SizedBox(height: 2.h),
 
-                      //Expanded(child: SvgPicture.asset(AppImages.continueWithGoogle)),
+                      // --- DIVIDER ---
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 3.h),
+                        child: Row(
+                          children: [
+                            const Expanded(child: Divider()),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 3.w),
+                              child: Text('OR', style: TextStyle(
+                                color: AppColors.orangeDark,
+                                fontSize: 14.sp,
+                              )),
+                            ),
+                            const Expanded(child: Divider()),
+                          ],
+                        ),
+                      ),
 
-                      // Google icon
-                      Row(
-                        spacing: 5.w,
-                        mainAxisAlignment: .center,
-                        children: [
-                          SvgPicture.asset(AppImages.googleIcon),
-                          SvgPicture.asset(AppImages.facebookIcon),
-                        ],
+                      // --- GOOGLE BUTTON ---
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: controller.isLoading.value ? null : controller.signInWithGoogle,
+                          icon: SvgPicture.asset(
+                            AppImages.googleIcon,
+                            height: 22,
+                            width: 22,
+                          ),
+                          label: Text(
+                            AppStrings.continueWithGoogle,
+                            style: AppFonts.latoRegular.copyWith(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 1.5.h),
+                            side: BorderSide(color: AppColors.orangePrimary),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
                       ),
 
                       SizedBox(height: 2.h),
-
 
                       if (controller.errorMessage.value.isNotEmpty)
                         Padding(
