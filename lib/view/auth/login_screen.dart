@@ -1,6 +1,8 @@
+import 'package:dio_api_call/core/constants.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_fonts.dart';
 import 'package:dio_api_call/res/app_strings.dart';
+import 'package:dio_api_call/res/spaces.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -12,35 +14,42 @@ class LoginScreen extends GetView<LoginController> {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Obx(
+    () => Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+            padding: EdgeInsets.symmetric(
+              horizontal: Constants.padding20,
+              vertical: Constants.padding20,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 48.sp,
+                  height: 48.sp,
                   decoration: BoxDecoration(
                     color: AppColors.orangePrimary.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(
+                      Constants.cornerRadius40,
+                    ),
                   ),
                   child: Image.asset(AppImages.chefLogo),
                 ),
 
-                SizedBox(height: 5.h),
+                SpaceH15(),
+
                 Text(
                   AppStrings.welcomeString,
                   style: AppFonts.latoRegular.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 22.sp,
+                    fontSize: constants.fontSize28px,
                     color: AppColors.orangePrimary,
                   ),
                 ),
-                SizedBox(height: 5.h),
+
+                SpaceH30(),
 
                 // Controllers now come from the controller, not local fields
                 _buildInputField(
@@ -49,159 +58,171 @@ class LoginScreen extends GetView<LoginController> {
                   controller: controller.usernameController,
                   isPassword: false,
                 ),
-                SizedBox(height: 3.h),
 
-                // Obx here so the eye icon reacts to isPasswordVisible changes
-                Obx(
-                  () => _buildInputField(
-                    icon: Icons.lock_outline,
-                    hint: AppStrings.enterPassword,
-                    controller: controller.passwordController,
-                    isPassword: true,
-                    isVisible: controller.isPasswordVisible.value,
-                    onToggleVisibility: controller.togglePasswordVisibility,
-                  ),
+                SpaceH20(),
+
+                //eye icon reacts to isPasswordVisible changes
+                _buildInputField(
+                  icon: Icons.lock_outline,
+                  hint: AppStrings.enterPassword,
+                  controller: controller.passwordController,
+                  isPassword: true,
+                  isVisible: controller.isPasswordVisible.value,
+                  onToggleVisibility: controller.togglePasswordVisibility,
                 ),
 
-                SizedBox(height: 5.h),
+                SpaceH30(),
 
-                // Obx wraps the button AND error text together.
-                // They are the only things that need to rebuild.
-                // The logo, title, and input fields above do NOT rebuild.
-                Obx(
-                  () => Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          // No more async here — controller handles everything
-                          onPressed: controller.isLoading.value
-                              ? null
-                              : controller.login,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.orangePrimary,
-                            disabledBackgroundColor: AppColors.orangePrimary
-                                .withValues(alpha: 0.6),
-                            padding: EdgeInsets.symmetric(vertical: 1.5.h),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
+                // make const widget which doesn't required rebuild
+                Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        // No more async here — controller handles everything
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : controller.login,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.orangePrimary,
+                          disabledBackgroundColor: AppColors.orangePrimary
+                              .withValues(alpha: 0.6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              Constants.cornerRadius40,
                             ),
                           ),
-                          child: controller.isLoading.value
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.white,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
-                              : Text(
-                                  AppStrings.login,
-                                  style: AppFonts.latoRegular.copyWith(
-                                    fontSize: 17.sp,
-                                    color: AppColors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        ),
+                        child: controller.isLoading.value
+                            ? SizedBox(
+                                width: 20.sp,
+                                height: 20.sp,
+                                child: CircularProgressIndicator(
+                                  color: AppColors.white,
                                 ),
-                        ),
+                              )
+                            : Text(
+                                AppStrings.login,
+                                style: AppFonts.latoRegular.copyWith(
+                                  fontSize: constants.fontSize18px,
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
+                    ),
 
-                      SizedBox(height: 2.h),
+                    SpaceH30(),
 
-                      // --- DIVIDER ---
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 2.h),
-                        child: Row(
-                          children: [
-                            const Expanded(child: Divider()),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 3.w),
-                              child: Text('OR', style: TextStyle(
+                    // --- DIVIDER ---
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Constants.padding16,
+                      ),
+                      child: Row(
+                        children: [
+                          const Expanded(child: Divider()),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Constants.padding12,
+                            ),
+                            child: Text(
+                              AppStrings.or,
+                              style: TextStyle(
                                 color: AppColors.orangeDark,
-                                fontSize: 14.sp,
-                              )),
+                                fontSize: constants.fontSize14px,
+                              ),
                             ),
-                            const Expanded(child: Divider()),
-                          ],
-                        ),
+                          ),
+                          const Expanded(child: Divider()),
+                        ],
                       ),
+                    ),
 
-                      // --- GOOGLE BUTTON ---
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          onPressed: controller.isLoading.value ? null : controller.signInWithGoogle,
-                          icon: SvgPicture.asset(
-                            AppImages.googleIcon,
-                            height: 22,
-                            width: 22,
-                          ),
-                          label: Text(
-                            AppStrings.continueWithGoogle,
-                            style: AppFonts.latoRegular.copyWith(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.black,
-                            ),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 1.5.h),
-                            side: BorderSide(color: AppColors.orangePrimary),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
+                    // --- GOOGLE BUTTON ---
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : controller.signInWithGoogle,
+                        icon: SvgPicture.asset(
+                          AppImages.googleIcon,
+                          height: 20.sp,
+                          width: 20.sp,
+                        ),
+                        label: Text(
+                          AppStrings.continueWithGoogle,
+                          style: AppFonts.latoRegular.copyWith(
+                            fontSize: constants.fontSize15px,
+                            fontWeight: .w600,
+                            color: AppColors.black,
                           ),
                         ),
-                      ),
-
-                      SizedBox(height: 2.h),
-
-                      // --- FACEBOOK BUTTON ---
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: controller.isLoading.value ? null : controller.signInWithFacebook,
-                          icon: const Icon(Icons.facebook, color: AppColors.white, size: 22),
-                          label: Text(
-                            AppStrings.continueWithFacebook,
-                            style: AppFonts.latoRegular.copyWith(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.white,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1877F2),
-                            padding: EdgeInsets.symmetric(vertical: 1.5.h),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: AppColors.orangePrimary),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              Constants.cornerRadius40,
                             ),
                           ),
                         ),
                       ),
+                    ),
 
-                      SizedBox(height: 2.h),
+                    SpaceH20(),
 
-                      if (controller.errorMessage.value.isNotEmpty)
-                        Padding(
-                          padding: EdgeInsets.only(top: 2.h),
-                          child: Text(
-                            controller.errorMessage.value,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: AppColors.red),
+                    // --- FACEBOOK BUTTON ---
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : controller.signInWithFacebook,
+                        icon: Icon(
+                          Icons.facebook,
+                          color: AppColors.white,
+                          size: 20.sp,
+                        ),
+                        label: Text(
+                          AppStrings.continueWithFacebook,
+                          style: AppFonts.latoRegular.copyWith(
+                            fontSize: constants.fontSize15px,
+                            fontWeight: .w600,
+                            color: AppColors.white,
                           ),
                         ),
-                    ],
-                  ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.fbBtnColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              Constants.cornerRadius40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SpaceH20(),
+
+                    if (controller.errorMessage.value.isNotEmpty)
+                      Padding(
+                        padding: EdgeInsets.only(top: 2.h),
+                        child: Text(
+                          controller.errorMessage.value,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: AppColors.red),
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 // Extracted to a private method — cleaner than a method inside State
@@ -234,13 +255,19 @@ Widget _buildInputField({
           : null,
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.orangePrimary),
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(Constants.cornerRadius40),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.orangePrimary, width: 2),
-        borderRadius: BorderRadius.circular(50),
+        borderSide: BorderSide(
+          color: AppColors.orangePrimary,
+          width: Constants.borderWidth6px,
+        ),
+        borderRadius: BorderRadius.circular(Constants.cornerRadius40),
       ),
-      contentPadding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: Constants.padding12,
+        vertical: Constants.padding16,
+      ),
     ),
   );
 }

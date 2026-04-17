@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_api_call/api/api_client.dart';
 import 'package:dio_api_call/api/model/response/recipe_details_response.dart';
 import 'package:dio_api_call/core/error/app_exception.dart';
 import '../api_end_point.dart';
@@ -6,8 +7,7 @@ import '../model/response/recipe_response.dart';
 
 class RecipeService {
   final Dio dio;
-
-  RecipeService(this.dio);
+  RecipeService({Dio? dio}) : dio = dio ?? APIClient().dio;
 
   // get Request for recipes.
   Future<List<Recipe>> getRecipe() async {

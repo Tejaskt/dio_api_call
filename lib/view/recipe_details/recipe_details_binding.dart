@@ -2,7 +2,6 @@ import 'package:dio_api_call/view/recipe_details/recipe_details_controller.dart'
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import '../../api/api_client.dart';
 import '../../api/services/recipe_service.dart';
 
 class RecipeDetailsBinding extends Bindings {
@@ -11,12 +10,8 @@ class RecipeDetailsBinding extends Bindings {
     // RecipeService may already be registered from HomeBinding.
     // fenix: true means GetX won't throw if it already exists —
     // it will reuse the existing instance.
-    Get.lazyPut<RecipeService>(
-          () => RecipeService(apiClient.dio),
-      fenix: true,
-    );
     Get.lazyPut<RecipeDetailsController>(
-          () => RecipeDetailsController(Get.find<RecipeService>()),
+          () => RecipeDetailsController(),
     );
   }
 }

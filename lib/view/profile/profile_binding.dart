@@ -8,7 +8,6 @@ class ProfileBinding extends Bindings{
   @override
   void dependencies() {
     Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<AuthService>(() => AuthService(apiClient.dio),);
 
   }
 

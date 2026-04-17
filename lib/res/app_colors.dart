@@ -21,5 +21,8 @@ class AppColors {
   static const Color orangeLight = Color(0xFFFFB38A);
   static const Color backGround = Color(0xFFFFA092);
 
+  /// facebook button color
+  static const Color fbBtnColor = Color(0xFF1877F2);
+
 
 }

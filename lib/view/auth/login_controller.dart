@@ -18,10 +18,10 @@ class LoginController extends GetxController {
   final errorMessage = ''.obs;
   final isPasswordVisible = false.obs;
 
-  // Injected via Binding - not created here
-  final AuthService _authService;
+  // auth service instance.
+  final AuthService _authService = AuthService();
 
-  LoginController(this._authService);
+  LoginController();
 
   // --- LIFECYCLE ---
   // onClose is called automatically by GetX when the controller
@@ -72,7 +72,7 @@ class LoginController extends GetxController {
     }
   }
 
-  // --- GOOGLE SIGN-IN ---
+  // --- GOOGLE SIGN-IN --- \\
   Future<void> signInWithGoogle() async {
     _setLoading(true);
 
@@ -87,7 +87,7 @@ class LoginController extends GetxController {
     }
   }
 
-  // --- FACEBOOK SIGN-IN ---
+  // --- FACEBOOK SIGN-IN --- \\
   Future<void> signInWithFacebook() async {
     _setLoading(true);
 

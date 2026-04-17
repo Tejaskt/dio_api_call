@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:dio_api_call/api/api_client.dart';
+import 'package:dio_api_call/res/app_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,9 +11,9 @@ import '../model/request/login_request.dart';
 import '../model/response/login_response.dart';
 
 class AuthService {
-  final Dio dio;
 
-  AuthService(this.dio);
+  final Dio dio;
+  AuthService({Dio? dio}) : dio = dio ?? APIClient().dio;
 
   // Firebase instance - created once, used across all auth methods
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -38,7 +40,7 @@ class AuthService {
 
       // user cancelled the dialog
       if (googleAccount == null) {
-        throw AppException('Google Sign-in was cancelled');
+        throw AppException(AppStrings.googleSignInCancelled);
       }
 
       // Get the auth tokens from google
@@ -61,7 +63,7 @@ class AuthService {
     } catch (e) {
       // re-throw AppException (like the cancelled one above) as-it
       if (e is AppException) rethrow;
-      throw AppException('Google Sign-in Failed. please try again');
+      throw AppException(AppStrings.googleSignInFailed);
     }
   }
 
@@ -75,10 +77,10 @@ class AuthService {
 
       // User cancelled or it failed
       if (loginResult.status == LoginStatus.cancelled) {
-        throw AppException('Facebook sign-in was cancelled');
+        throw AppException(AppStrings.facebookSignInCancelled);
       }
       if (loginResult.status == LoginStatus.failed) {
-        throw AppException('Facebook sign-in failed: ${loginResult.message}');
+        throw AppException('${AppStrings.facebookSignInFailed} ${loginResult.message}');
       }
 
       // Build a Firebase credential from the Facebook token
@@ -94,7 +96,7 @@ class AuthService {
       throw AppException(_firebaseErrorMessage(e.code));
     } catch (e) {
       if (e is AppException) rethrow;
-      throw AppException('Facebook sign-in failed. Please try again.');
+      throw AppException(AppStrings.facebookSignInFailed);
     }
   }
 
@@ -108,7 +110,7 @@ class AuthService {
         // Facebook auto-clears on FirebaseAuth.signOut()
       ]);
     } catch (e) {
-      throw AppException('Sign-out Error :$e');
+      throw AppException('${AppStrings.signOutError} :$e');
     }
   }
 
@@ -129,16 +131,16 @@ class AuthService {
   // messages for Firebase error codes
   String _firebaseErrorMessage(String code) {
     switch (code) {
-      case 'account-exists-with-different-credential':
-        return 'An account already exists with a different sign-in method for this email.';
-      case 'invalid-credential':
-        return 'The sign-in credential is invalid or has expired.';
-      case 'user-disabled':
-        return 'This account has been disabled.';
-      case 'network-request-failed':
-        return 'Network error. Please check your connection.';
+      case AppStrings.codeAccountDifferentCredential:
+        return AppStrings.msgAccountDifferentCredential;
+      case AppStrings.codeInvalidCredential:
+        return AppStrings.msgInvalidCredential;
+      case AppStrings.codeUserDisabled:
+        return AppStrings.msgUserDisabled;
+      case AppStrings.codeNetworkRequestFailed:
+        return AppStrings.msgNetworkRequestFailed;
       default:
-        return 'Authentication failed. Please try again.';
+        return AppStrings.defaultErrorMsg;
     }
   }
 }

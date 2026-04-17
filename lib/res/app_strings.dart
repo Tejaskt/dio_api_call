@@ -6,6 +6,7 @@ class AppStrings {
 
   // Login Screen
   static const String login = 'Log In';
+  static const String or = 'OR';
   static const String welcomeString = 'Welcome Back!';
   static const String continueWithGoogle = 'Continue with Google';
   static const String continueWithFacebook = 'Continue with Facebook';
@@ -32,5 +33,21 @@ class AppStrings {
 
   /// error messages
  static const String loginFieldEmpty  = 'Please enter username and password';
+ static const String googleSignInCancelled = 'Google Sign-in was cancelled';
+ static const String facebookSignInCancelled = 'Facebook sign-in was cancelled';
+ static const String googleSignInFailed = 'Google Sign-in Failed. please try again';
+ static const String facebookSignInFailed = 'Facebook sign-in failed. Please try again';
+ static const String signOutError = 'Sign-out Error';
 
+
+ /// facebook error messages
+static const String codeAccountDifferentCredential = 'account-exists-with-different-credential';
+static const String msgAccountDifferentCredential = 'An account already exists with a different sign-in method for this email.';
+static const String codeInvalidCredential = 'invalid-credential';
+static const String msgInvalidCredential = 'The sign-in credential is invalid or has expired.';
+static const String codeUserDisabled = 'user-disabled';
+static const String msgUserDisabled = 'This account has been disabled.';
+static const String codeNetworkRequestFailed = 'network-request-failed';
+static const String msgNetworkRequestFailed = 'Network error. Please check your connection.';
+static const String defaultErrorMsg = 'Authentication failed. Please try again.';
 }

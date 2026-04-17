@@ -1,5 +1,7 @@
 import 'package:dio_api_call/core/component/shimmer_effect.dart';
+import 'package:dio_api_call/core/constants.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
+import 'package:dio_api_call/res/spaces.dart';
 import 'package:dio_api_call/view/home/home_controller.dart';
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_strings.dart';
@@ -20,12 +22,10 @@ class HomeScreen extends GetView<HomeController> {
         backgroundColor: AppColors.orangePrimary,
         foregroundColor: AppColors.white,
       ),
-
       body: Obx(() {
 
           if (controller.isLoading.value) {
             return const ShimmerEffect();
-            //return const Center(child: CircularProgressIndicator());
           }
 
           if (controller.errorMessage.value.isNotEmpty) {
@@ -34,7 +34,7 @@ class HomeScreen extends GetView<HomeController> {
                 mainAxisAlignment: .center,
                 children: [
                   Text(controller.errorMessage.value),
-                  SizedBox(height: 2.h),
+                  SpaceH10(),
                   ElevatedButton(
                     onPressed: controller.fetchRecipes,
                     child: const Text(AppStrings.retry),
@@ -44,13 +44,11 @@ class HomeScreen extends GetView<HomeController> {
             );
           }
 
-
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            //padding: EdgeInsets.symmetric(horizontal : 5.w, vertical: 4.h),
             itemCount: controller.recipes.length,
             itemBuilder: (context, index) {
-              return recipeCard(recipe: controller.recipes[index]);
+              return _recipeCard(recipe: controller.recipes[index]);
             },
           );
         },
@@ -60,16 +58,16 @@ class HomeScreen extends GetView<HomeController> {
 }
 
 
-Widget recipeCard({required Recipe recipe}) {
+Widget _recipeCard({required Recipe recipe}) {
   final totalTime = recipe.prepTime + recipe.cookTime;
 
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 8),
+    margin: EdgeInsets.symmetric(horizontal: Constants.padding16, vertical: Constants.padding12),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(Constants.cornerRadius18),
       color: AppColors.white,
       boxShadow: [
-        BoxShadow(blurRadius: 8, color: AppColors.black.withValues(alpha: 0.1)),
+        BoxShadow(blurRadius: Constants.blurRadius8, color: AppColors.black.withValues(alpha: 0.1)),
       ],
     ),
     child: Column(
@@ -83,15 +81,15 @@ Widget recipeCard({required Recipe recipe}) {
             Get.toNamed(RouteName.recipeDetails,arguments: recipe.id);
           },
           child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(Constants.cornerRadius16)),
             child: Hero(
               tag: 'recipe_${recipe.id}',
               child: Image.network(
                 recipe.image,
-                height: 10.h,
+                height: 38.sp,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_,_,_) => const Icon(Icons.broken_image,size: 100),
+                errorBuilder: (_,_,_) => const Icon(Icons.broken_image),
               ),
             ),
           ),
@@ -99,7 +97,7 @@ Widget recipeCard({required Recipe recipe}) {
 
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(Constants.padding8),
             child: Column(
               crossAxisAlignment: .start,
               mainAxisAlignment: .spaceBetween,
@@ -107,8 +105,8 @@ Widget recipeCard({required Recipe recipe}) {
                 // Name
                 Text(
                   recipe.name,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: constants.fontSize16px,
                     fontWeight: .bold,
                   ),
                   maxLines: 2,
@@ -121,8 +119,8 @@ Widget recipeCard({required Recipe recipe}) {
                     // Rating
                     Row(
                       children: [
-                        const Icon(Icons.star, color: AppColors.orange, size: 18),
-                        const SizedBox(width: 4),
+                        Icon(Icons.star, color: AppColors.orange, size: 16.sp),
+                        SpaceW5(),
                         Text(recipe.rating.toString()),
                       ],
                     ),

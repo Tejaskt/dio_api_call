@@ -1,6 +1,7 @@
 import 'package:dio_api_call/res/app_colors.dart';
 import 'package:dio_api_call/res/app_images.dart';
 import 'package:dio_api_call/res/app_strings.dart';
+import 'package:dio_api_call/res/spaces.dart';
 import 'package:dio_api_call/view/splash/splash_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,10 +25,7 @@ class SplashScreen extends GetView<SplashController> {
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  AppColors.orangeLight,
-                  AppColors.orangeDark,
-                ],
+                colors: [AppColors.orangeLight, AppColors.orangeDark],
                 begin: .topCenter,
                 end: .bottomCenter,
               ),
@@ -37,58 +35,52 @@ class SplashScreen extends GetView<SplashController> {
                 opacity: controller.fadeAnimation,
                 child: ScaleTransition(
                   scale: controller.scaleAnimation,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 420),
-                    child: Column(
-                      mainAxisAlignment: .center,
-                      children: [
-
-                        // logo container
-                        Container(
-                          width: iconSize,
-                          height: iconSize,
-                          decoration: BoxDecoration(
-                            color: AppColors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(iconSize / 3),
-                          ),
-                          child: Image.asset(
-                            AppImages.chefLogo,
-                          ),
+                  child: Column(
+                    mainAxisAlignment: .center,
+                    children: [
+                      // logo container
+                      Container(
+                        width: iconSize,
+                        height: iconSize,
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(iconSize / 3),
                         ),
+                        child: Image.asset(AppImages.chefLogo),
+                      ),
 
-                        SizedBox(height: h * 0.03),
+                      SpaceH10(),
 
-                        // Title
-                        Text(
-                          AppStrings.appName,
-                          style: theme.textTheme.headlineLarge?.copyWith(
-                            color: AppColors.white,
-                            letterSpacing: 0.5,
-                          ),
+                      // Title
+                      Text(
+                        AppStrings.appName,
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          color: AppColors.white,
+                          letterSpacing: 0.5,
                         ),
+                      ),
 
-                        SizedBox(height: h * 0.015),
+                      SpaceH10(),
 
-                        // Subtitle
-                        Text(
-                          AppStrings.appMoto,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white.withValues(alpha: 0.85),
-                          ),
+                      // Subtitle
+                      Text(
+                        AppStrings.appMoto,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white.withValues(alpha: 0.85),
                         ),
+                      ),
 
-                        SizedBox(height: h * 0.06),
+                      SpaceH10(),
 
-                        // Logo
-                        Image.asset(
-                          AppImages.appLogo,
-                          width: logoSize,
-                          height: logoSize,
-                          fit: BoxFit.contain,
-                        ),
-                      ],
-                    ),
+                      // Logo
+                      Image.asset(
+                        AppImages.appLogo,
+                        width: logoSize,
+                        height: logoSize,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
                   ),
                 ),
               ),
