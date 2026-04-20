@@ -1,6 +1,8 @@
 import 'package:dio_api_call/core/component/shimmer_effect.dart';
+import 'package:dio_api_call/core/constants.dart';
 import 'package:dio_api_call/res/app_fonts.dart';
 import 'package:dio_api_call/res/app_strings.dart';
+import 'package:dio_api_call/res/spaces.dart';
 import 'package:dio_api_call/view/recipe_details/recipe_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +34,7 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
             SliverAppBar(
               iconTheme: const IconThemeData(color: AppColors.white),
               backgroundColor: AppColors.orangePrimary,
-              expandedHeight: 250,
+              expandedHeight: 70.sp,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 title: ColoredBox(
@@ -50,61 +52,71 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
                     recipe.image,
                     fit: BoxFit.cover,
                     errorBuilder: (_, _, _) =>
-                    const Icon(Icons.broken_image, size: 100),
+                     Icon(Icons.broken_image, size: 16.sp),
                   ),
                 ),
               ),
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(Constants.padding16),
                 child: Column(
                   crossAxisAlignment: .start,
                   children: [
-                    Row(
-                      mainAxisAlignment: .spaceBetween,
-                      children: [
-                        _infoBox(
-                          Row(
-                            mainAxisAlignment: .center,
-                            children: [
-                              Icon(Icons.star,
-                                  color: AppColors.orange, size: 18),
-                              const SizedBox(width: 8),
-                              Text('${recipe.rating}', style: AppFonts.txtStyle),
-                            ],
-                          ),
-                        ),
-                        _infoBox(
-                          Center(
-                            child: Text('$totalTime min', style: AppFonts.txtStyle),
-                          ),
-                        ),
-                        _infoBox(
-                          Center(
-                            child: Text(
-                              '${recipe.servings} servings',
-                              style: AppFonts.txtStyle,
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Constants.padding10),
+                      child: Row(
+                        mainAxisAlignment: .spaceBetween,
+                        children: [
+                          _infoBox(
+                            Row(
+                              mainAxisAlignment: .center,
+                              children: [
+                                Icon(Icons.star,
+                                    color: AppColors.orange, size: 18.sp),
+
+                                spaceW8,
+
+                                Text('${recipe.rating}', style: AppFonts.txtStyle),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                          _infoBox(
+                            Center(
+                              child: Text('$totalTime min', style: AppFonts.txtStyle),
+                            ),
+                          ),
+                          _infoBox(
+                            Center(
+                              child: Text(
+                                '${recipe.servings} servings',
+                                style: AppFonts.txtStyle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 16),
+                    spaceH20,
+
                     _sectionChip(AppStrings.ingredients),
-                    const SizedBox(height: 8),
+                    spaceH8,
+
                     ...recipe.ingredients.map(
                           (e) => _contentCard('• $e'),
                     ),
-                    const SizedBox(height: 16),
+
+                    spaceH15,
                     _sectionChip(AppStrings.instructions),
-                    const SizedBox(height: 8),
+
+                    spaceH8,
                     ...recipe.instructions.asMap().entries.map(
                           (entry) => _contentCard(
                         '${entry.key + 1}. ${entry.value}',
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    spaceH20
                   ],
                 ),
               ),
@@ -120,7 +132,6 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.black),
-          borderRadius: BorderRadius.circular(0),
         ),
         child: child,
       ),
@@ -133,7 +144,7 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
         label: Text(
           label,
           style: AppFonts.txtStyle.copyWith(
-            fontSize: 18,
+            fontSize: constants.fontSize18px,
           ),
         ),
       ),
@@ -146,11 +157,11 @@ class RecipeDetailScreen extends GetView<RecipeDetailsController> {
       child: Card(
         color: AppColors.orangeLight,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(Constants.padding12),
           child: Text(
             text,
             style: AppFonts.txtStyle.copyWith(
-              fontSize: 16,
+              fontSize: constants.fontSize16px,
               fontWeight: FontWeight.normal,
             ),
           ),

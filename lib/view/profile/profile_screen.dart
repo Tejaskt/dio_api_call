@@ -1,3 +1,5 @@
+import 'package:dio_api_call/core/constants.dart';
+import 'package:dio_api_call/res/spaces.dart';
 import 'package:dio_api_call/view/profile/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,22 +50,24 @@ class ProfileScreen extends GetView<ProfileController> {
             children: [
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 4.h),
+                padding: EdgeInsets.symmetric(vertical: Constants.padding20),
                 decoration: BoxDecoration(
                   color: AppColors.orangePrimary,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(Constants.cornerRadius24),
+                    bottomRight: Radius.circular(Constants.cornerRadius24),
                   ),
                 ),
                 child: Column(
                   children: [
                     CircleAvatar(
-                      radius: 12.w,
+                      radius: Constants.cornerRadius30,
                       backgroundColor: AppColors.white,
                       backgroundImage: NetworkImage(user.image),
                     ),
-                    SizedBox(height: 2.h),
+
+                    SpaceH20(),
+
                     Text(
                       controller.userLoggedInUsingFirebase.value
                           ? user.name
@@ -74,6 +78,7 @@ class ProfileScreen extends GetView<ProfileController> {
                         color: AppColors.white,
                       ),
                     ),
+
                     Text(
                       controller.userLoggedInUsingFirebase.value
                           ? user.provider
@@ -87,7 +92,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(5.w),
+                padding: EdgeInsets.all(Constants.padding16),
                 child: Column(
                   children: [
                     _buildInfoTile(
@@ -107,29 +112,31 @@ class ProfileScreen extends GetView<ProfileController> {
                   ],
                 ),
               ),
-              SizedBox(height: 4.h),
+              SpaceH30(),
+
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                padding: EdgeInsets.symmetric(horizontal: Constants.padding16),
                 child: ElevatedButton(
                   onPressed: controller.logout,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.redAccent,
-                    minimumSize: Size(double.infinity, 5.h),
+                    minimumSize: Size(double.infinity, Constants.logoutButtonHeight),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(Constants.cornerRadius40),
                     ),
                   ),
                   child: Text(
                     AppStrings.logout,
                     style: AppFonts.latoRegular.copyWith(
-                      fontSize: 16.sp,
+                      fontSize: constants.fontSize16px,
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 4.h),
+
+              spaceH20
             ],
           ),
         );
@@ -140,19 +147,19 @@ class ProfileScreen extends GetView<ProfileController> {
 
 Widget _buildInfoTile(IconData icon, String label, String value) {
   return Card(
-    margin: EdgeInsets.symmetric(vertical: 1.h),
-    elevation: 2,
+    margin: EdgeInsets.symmetric(vertical: Constants.padding10),
+    elevation: Constants.elevation,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     child: ListTile(
       leading: Icon(icon, color: AppColors.orangePrimary),
       title: Text(
         label,
-        style: TextStyle(fontSize: 14.sp, color: AppColors.listTileLabel),
+        style: TextStyle(fontSize: constants.fontSize14px, color: AppColors.listTileLabel),
       ),
       subtitle: Text(
         value,
         style: TextStyle(
-          fontSize: 16.sp,
+          fontSize: constants.fontSize16px,
           fontWeight: FontWeight.bold,
           color: AppColors.black,
         ),

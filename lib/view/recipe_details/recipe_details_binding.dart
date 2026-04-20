@@ -2,7 +2,6 @@ import 'package:dio_api_call/view/recipe_details/recipe_details_controller.dart'
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import '../../api/services/recipe_service.dart';
 
 class RecipeDetailsBinding extends Bindings {
   @override

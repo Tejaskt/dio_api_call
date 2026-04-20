@@ -24,6 +24,7 @@ class Constants {
 
   static final double controlHeight = 28.sp;
   static final double buttonHeight = 4.sp;
+  static final double logoutButtonHeight = 24.sp;
 
   static final double padding4 = 4.sp;
   static final double padding6 = 6.sp;
@@ -33,6 +34,8 @@ class Constants {
   static final double padding14 = 14.sp;
   static final double padding16 = 16.sp;
   static final double padding20 = 20.sp;
+
+  static final double elevation = 4.sp;
 
   static final double borderWidth6px = 6.sp;
   static final double navBarHeight = 4.sp;
