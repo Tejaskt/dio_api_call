@@ -97,7 +97,7 @@ Widget _recipeCard({required Recipe recipe}) {
 
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(Constants.padding8),
+            padding: EdgeInsets.all(Constants.padding10),
             child: Column(
               crossAxisAlignment: .start,
               mainAxisAlignment: .spaceBetween,
