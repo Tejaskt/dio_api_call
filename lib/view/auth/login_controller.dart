@@ -1,4 +1,5 @@
 import 'package:dio_api_call/api/services/auth_service.dart';
+import 'package:dio_api_call/core/error/app_exception.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/core/storage/secure_storage.dart';
 import 'package:dio_api_call/res/app_strings.dart';
@@ -56,9 +57,15 @@ class LoginController extends GetxController {
     //notifyListeners(); get x remove this
 
     try {
-      final user = await _authService.login(
-        LoginRequest(username: username, password: password),
+      final response = await _authService.login(
+        request: LoginRequest(username: username, password: password),
       );
+
+      final user = response.data;
+
+      if(user == null){
+        throw Exception(response.message ?? AppStrings.loginFailed);
+      }
 
       await SecureStorage.saveToken(user.accessToken);
       await SecureStorage.saveUser(user);
@@ -66,7 +73,11 @@ class LoginController extends GetxController {
       Get.offAllNamed(RouteName.bottomNavigation);
 
     } catch (e) {
-      errorMessage.value = e.toString();
+      if(e is AppException){
+        errorMessage.value = e.message;
+      }else{
+        errorMessage.value = AppStrings.somethingWentWrong;
+      }
     } finally {
       isLoading.value = false;
     }

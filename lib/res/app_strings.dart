@@ -38,6 +38,10 @@ class AppStrings {
  static const String googleSignInFailed = 'Google Sign-in Failed. please try again';
  static const String facebookSignInFailed = 'Facebook sign-in failed. Please try again';
  static const String signOutError = 'Sign-out Error';
+ static const String loginFailed = 'Login Failed';
+ static const String failedRecipes = 'Failed to load recipes';
+
+ static const String somethingWentWrong = 'Something went wrong';
 
 
  /// facebook error messages

@@ -1,7 +1,9 @@
+import 'package:dio_api_call/res/app_strings.dart';
 import 'package:get/get.dart';
 
 import '../../api/model/response/recipe_response.dart';
 import '../../api/services/recipe_service.dart';
+import '../../core/error/app_exception.dart';
 
 class HomeController extends GetxController {
 
@@ -27,10 +29,19 @@ class HomeController extends GetxController {
     errorMessage.value = '';
 
     try{
-      final result = await _recipeService.getRecipe();
-      recipes.assignAll(result);
+      final response = await _recipeService.getRecipe();
+      final data = response.data;
+
+      if(data == null){
+        throw Exception(response.message ?? AppStrings.failedRecipes);
+      }
+      recipes.assignAll(data);
     }catch(e){
-      errorMessage.value = e.toString();
+      if (e is AppException) {
+        errorMessage.value = e.message;
+      } else {
+        errorMessage.value = "Something went wrong";
+      }
     }finally{
       isLoading.value = false;
     }

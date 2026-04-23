@@ -17,7 +17,7 @@ class SplashScreen extends GetView<SplashController> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final w = constraints.maxWidth;
-          final h = constraints.maxHeight;
+          //final h = constraints.maxHeight;
 
           final iconSize = w * 0.22;
           final logoSize = w * 0.7;

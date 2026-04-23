@@ -3,7 +3,6 @@ import 'package:dio_api_call/res/app_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../../../../core/error/app_exception.dart';
 import '../api_end_point.dart';
 import '../model/common/firebase_user.dart';
@@ -13,17 +12,18 @@ import '../model/response/login_response.dart';
 class AuthService {
   static var shared = AuthService();
 
+  // Firebase instances
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  // REFACTORED LOGIN
+  // API LOGIN
   Future<ApiResponse<LoginResponse>> login({
     required LoginRequest request,
   }) {
     return client.request<LoginResponse>(
+      data: request.toJson(),
       url: apiEndPoint.login,
       method: HttpMethod.post,
-      data: request.toJson(),
       fromJson: (data) => LoginResponse.fromJson(data),
       isAuth: true,
     );
@@ -74,7 +74,8 @@ class AuthService {
 
       if (loginResult.status == LoginStatus.failed) {
         throw AppException(
-            '${AppStrings.facebookSignInFailed} ${loginResult.message}');
+          '${AppStrings.facebookSignInFailed} ${loginResult.message}'
+        );
       }
 
       final OAuthCredential credential =
@@ -122,16 +123,12 @@ class AuthService {
     switch (code) {
       case AppStrings.codeAccountDifferentCredential:
         return AppStrings.msgAccountDifferentCredential;
-
       case AppStrings.codeInvalidCredential:
         return AppStrings.msgInvalidCredential;
-
       case AppStrings.codeUserDisabled:
         return AppStrings.msgUserDisabled;
-
       case AppStrings.codeNetworkRequestFailed:
         return AppStrings.msgNetworkRequestFailed;
-
       default:
         return AppStrings.defaultErrorMsg;
     }

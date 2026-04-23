@@ -160,8 +160,18 @@ class ApiResponse<T> {
       Map<String, dynamic>? json,
       T Function(Map<String, dynamic>) create,
       ) {
+    // If API doesn't wrap response → treat whole JSON as data
+    if (json != null && !json.containsKey("data")) {
+      return ApiResponse<T>(
+        data: create(json),
+        message: null,
+        status: true,
+        code: 200,
+      );
+    }
+
     return ApiResponse<T>(
-      data: json?["data"] != null ? create(json?["data"]) : null,
+      data: json?["data"] != null ? create(json!["data"]) : null,
       message: json?["message"],
       status: json?["status"],
       code: json?["code"],
