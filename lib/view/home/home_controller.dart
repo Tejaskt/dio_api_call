@@ -5,7 +5,7 @@ import '../../api/services/recipe_service.dart';
 
 class HomeController extends GetxController {
 
-  final RecipeService _recipeService = RecipeService();
+  final RecipeService _recipeService = RecipeService.shared;
   HomeController();
 
   // RxList - the ui reacts when items are added/cleared

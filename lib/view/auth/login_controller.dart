@@ -19,7 +19,7 @@ class LoginController extends GetxController {
   final isPasswordVisible = false.obs;
 
   // auth service instance.
-  final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService.shared;
 
   LoginController();
 

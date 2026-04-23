@@ -34,7 +34,7 @@ class ProfileController extends GetxController {
     if (firebaseUser != null) {
       // AuthService.signOut() handles Firebase + Google + Facebook
       // Get it via Get.find since AuthService is already registered
-      await AuthService().signOut();
+      await AuthService.shared.signOut();
     }
 
     // Clear all local storage regardless of login method

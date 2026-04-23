@@ -4,7 +4,7 @@ import '../../api/model/response/recipe_details_response.dart';
 
 class RecipeDetailsController extends GetxController {
 
-  final RecipeService _recipeService = RecipeService();
+  final RecipeService _recipeService = RecipeService.shared;
   RecipeDetailsController();
 
  final recipe = Rxn<RecipeDetail>();

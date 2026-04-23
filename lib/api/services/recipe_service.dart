@@ -6,31 +6,27 @@ import '../api_end_point.dart';
 import '../model/response/recipe_response.dart';
 
 class RecipeService {
-  final Dio dio;
-  RecipeService({Dio? dio}) : dio = dio ?? APIClient().dio;
+  static var shared = RecipeService();
 
   // get Request for recipes.
-  Future<List<Recipe>> getRecipe() async {
-    try {
-      final response = await dio.get(apiEndPoint.getRecipe);
-      final data = response.data;
-      final List list = data['recipes'];
-
-      return list.map((e) => Recipe.fromJson(e)).toList();
-    } on DioException catch (e) {
-      throw ErrorHandler.handle(e);
-    }
+  Future<ApiResponse<List<Recipe>>> getRecipe() {
+    return client.request<List<Recipe>>(
+      url: apiEndPoint.getRecipe,
+      method: HttpMethod.get,
+      fromJson: (data) {
+        final List list = data['recipes'];
+        return list.map((e) => Recipe.fromJson(e)).toList();
+      },
+    );
   }
 
   // get recipe by id
-  Future<RecipeDetail> getRecipeDetails(int id) async {
-    try {
-      final response = await dio.get('${apiEndPoint.getRecipe}/$id');
-      final data = response.data;
-      return RecipeDetail.fromJson(data);
-    } on DioException catch (e) {
-      throw ErrorHandler.handle(e);
-    }
+  Future<ApiResponse<RecipeDetail>> getRecipeDetails(int id) {
+    return client.request<RecipeDetail>(
+      url: '${apiEndPoint.getRecipe}/$id',
+      method: HttpMethod.get,
+      fromJson: (data) => RecipeDetail.fromJson(data),
+    );
   }
 
 }
