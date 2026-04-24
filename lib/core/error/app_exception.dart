@@ -15,7 +15,7 @@ class AppException implements Exception {
   String toString() => message;
 }
 
-// 🔥 CENTRALIZED ERROR HANDLER
+// CENTRALIZED ERROR HANDLER
 class ErrorHandler {
   static AppException handle(DioException error) {
     switch (error.type) {
@@ -43,7 +43,7 @@ class ErrorHandler {
     }
   }
 
-  // 🔥 STATUS CODE HANDLING
+  // STATUS CODE HANDLING
   static AppException _handleStatusCode(DioException error) {
     final statusCode = error.response?.statusCode;
     final data = error.response?.data;

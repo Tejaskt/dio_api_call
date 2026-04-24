@@ -16,7 +16,6 @@ class APIClient {
 
   Future<Dio> getApiClient({
     String? content = ApiEndPoint.mimeJson,
-    bool needEncryptDecrypt = false,
     bool isAuth = false,
   }) async {
     Dio dio = Dio(
@@ -69,31 +68,6 @@ class APIClient {
     return dio;
   }
 
-  catchError(DioException error) {
-    if (error.type == DioExceptionType.connectionError) {
-      throw AppException("No internet connection", code: -1);
-    } else if (error.response != null) {
-      final statusCode = error.response?.statusCode;
-
-      switch (statusCode) {
-        case 400:
-          throw AppException("Bad request", code: statusCode);
-        case 401:
-          throw AppException("Unauthorized", code: statusCode);
-        case 404:
-          throw AppException("Not found", code: statusCode);
-        case 408:
-          throw AppException("Connection timeout", code: statusCode);
-        case 500:
-          throw AppException("Server error", code: statusCode);
-        default:
-          throw AppException("Something went wrong", code: statusCode);
-      }
-    } else {
-      throw AppException("Unexpected error", code: -1);
-    }
-  }
-
   Future<ApiResponse<T>> request<T>({
     required String url,
     required HttpMethod method,
@@ -107,7 +81,6 @@ class APIClient {
       APIClient apiClient = APIClient();
       Dio dio = await apiClient.getApiClient(
         content: contentType,
-        needEncryptDecrypt: false,
         isAuth: isAuth,
       );
 
@@ -146,6 +119,31 @@ class APIClient {
   }
 }
 
+catchError(DioException error) {
+  if (error.type == DioExceptionType.connectionError) {
+    throw AppException("No internet connection", code: -1);
+  } else if (error.response != null) {
+    final statusCode = error.response?.statusCode;
+
+    switch (statusCode) {
+      case 400:
+        throw AppException("Bad request", code: statusCode);
+      case 401:
+        throw AppException("Unauthorized", code: statusCode);
+      case 404:
+        throw AppException("Not found", code: statusCode);
+      case 408:
+        throw AppException("Connection timeout", code: statusCode);
+      case 500:
+        throw AppException("Server error", code: statusCode);
+      default:
+        throw AppException("Something went wrong", code: statusCode);
+    }
+  } else {
+    throw AppException("Unexpected error", code: -1);
+  }
+}
+
 enum HttpMethod { get, post, put, delete, patch }
 
 class ApiResponse<T> {
@@ -160,8 +158,10 @@ class ApiResponse<T> {
       Map<String, dynamic>? json,
       T Function(Map<String, dynamic>) create,
       ) {
+
     // If API doesn't wrap response → treat whole JSON as data
     if (json != null && !json.containsKey("data")) {
+
       return ApiResponse<T>(
         data: create(json),
         message: null,
