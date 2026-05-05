@@ -1,3 +1,4 @@
+import 'package:dio_api_call/core/notifications/notification_service.dart';
 import 'package:dio_api_call/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,17 +9,12 @@ import 'package:dio_api_call/core/routes/route.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 
-
 @pragma('vm:entry-point')
-Future<void> _backgroundHandler(RemoteMessage message) async{
+Future<void> firebaseBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  print('Got background message : ${message.notification?.title}');
 }
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +24,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  //FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+  // Register Background handler
+  FirebaseMessaging.onBackgroundMessage(firebaseBackgroundHandler);
+
+  await NotificationService().init();
 
   runApp(const MyApp());
 }
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -40,8 +41,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
-
-        final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
         return GetMaterialApp(
           navigatorKey: navigatorKey,
           title: AppStrings.appName,

@@ -1,5 +1,3 @@
-import 'package:dio_api_call/core/services/local_notification_service.dart';
-import 'package:dio_api_call/core/services/notification_service.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../core/routes/route_name.dart';
@@ -12,15 +10,14 @@ class SplashController extends GetxController
   late Animation<double> fadeAnimation;
   late Animation<double> scaleAnimation;
 
-  final NotificationService _notificationService = NotificationService();
+  bool _ran = false;
 
   @override
   void onInit() {
     super.onInit();
 
-    LocalNotificationService.init();
-    // For Notification
-    _notificationService.init();
+    if(_ran) return;
+    _ran = true;
 
     controller = AnimationController(
       vsync: this,
