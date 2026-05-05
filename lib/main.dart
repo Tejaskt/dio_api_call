@@ -1,11 +1,24 @@
 import 'package:dio_api_call/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:dio_api_call/core/routes/route.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/res/app_strings.dart';
+
+
+@pragma('vm:entry-point')
+Future<void> _backgroundHandler(RemoteMessage message) async{
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  print('Got background message : ${message.notification?.title}');
+}
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +27,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  //FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
 
   runApp(const MyApp());
 }
@@ -25,7 +40,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
+
+        final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
         return GetMaterialApp(
+          navigatorKey: navigatorKey,
           title: AppStrings.appName,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
