@@ -1,46 +1,52 @@
-import 'package:dio_api_call/core/notifications/local_notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'notification_handler.dart';
+import 'local_notification_service.dart';
+import 'notification_navigation.dart';
 
 class NotificationService {
+  NotificationService._();
+
+  static final NotificationService instance =
+  NotificationService._();
+
   static bool _initialized = false;
 
-  Future<void> init() async{
-    if(_initialized) return;
+  Future<void> init() async {
+    if (_initialized) return;
     _initialized = true;
 
     final messaging = FirebaseMessaging.instance;
 
-    // request permission - important for android 13+ & ios
     await messaging.requestPermission();
+
     await LocalNotificationService.init();
 
-    // Get token(for testing)
-    String? token = await FirebaseMessaging.instance.getToken();
-    print('fcm token : $token');
+    final token = await messaging.getToken();
+    print('FCM Token: $token');
 
-    // Foreground State Push Notification
-    FirebaseMessaging.onMessage.listen(_onForeground);
+    FirebaseMessaging.onMessage.listen(_handleForeground);
 
-    // Background State Push Notification
-    FirebaseMessaging.onMessageOpenedApp.listen(_onOpened);
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      NotificationNavigation.handle,
+    );
 
-    // Terminated State Push Notification
     final initialMessage = await messaging.getInitialMessage();
+
     if (initialMessage != null) {
-      _onOpened(initialMessage);
+      NotificationNavigation.handle(initialMessage);
     }
   }
 
-  void _onForeground(RemoteMessage message) {
-    final title = message.data['title'] ?? '';
-    final body = message.data['body'] ?? '';
+  Future<void> _handleForeground(
+      RemoteMessage message,
+      ) async {
+    final notification = message.notification;
 
-    LocalNotificationService.show(title, body);
-  }
+    if (notification == null) return;
 
-  void _onOpened(RemoteMessage message) {
-    NotificationHandler.handle(message);
+    await LocalNotificationService.show(
+      title: notification.title ?? '',
+      body: notification.body ?? '',
+    );
   }
 }

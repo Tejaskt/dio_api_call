@@ -9,6 +9,7 @@ import 'package:dio_api_call/core/routes/route.dart';
 import 'package:dio_api_call/core/routes/route_name.dart';
 import 'package:dio_api_call/res/app_strings.dart';
 
+// BACKGROUND NOTIFICATION HANDLER
 @pragma('vm:entry-point')
 Future<void> firebaseBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -27,7 +28,7 @@ void main() async {
   // Register Background handler
   FirebaseMessaging.onBackgroundMessage(firebaseBackgroundHandler);
 
-  await NotificationService().init();
+  await NotificationService.instance.init();
 
   runApp(const MyApp());
 }

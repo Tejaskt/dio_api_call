@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../core/notifications/notification_route_manager.dart';
 import '../../core/routes/route_name.dart';
 import '../../core/storage/secure_storage.dart';
 
@@ -39,6 +40,29 @@ class SplashController extends GetxController
     controller.forward();
 
     _checkLoginStatus();
+
+    if (NotificationRouteManager.hasPendingRecipe) {
+      final id = int.parse(
+        NotificationRouteManager.recipeId!,
+      );
+
+      NotificationRouteManager.clear();
+
+      Get.offAllNamed(RouteName.bottomNavigation);
+
+      Future.delayed(
+        const Duration(milliseconds: 300),
+            () {
+          Get.toNamed(
+            RouteName.recipeDetails,
+            arguments: id,
+          );
+        },
+      );
+
+      return;
+    }
+
   }
 
   /* What mounted does
