@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
+import '../routes/route_name.dart';
 import 'local_notification_service.dart';
-import 'notification_navigation.dart';
 
 class NotificationService {
   NotificationService._();
@@ -10,6 +12,8 @@ class NotificationService {
   NotificationService._();
 
   static bool _initialized = false;
+
+  int? pendingRecipeId;
 
   Future<void> init() async {
     if (_initialized) return;
@@ -27,13 +31,14 @@ class NotificationService {
     FirebaseMessaging.onMessage.listen(_handleForeground);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
-      NotificationNavigation.handle,
+      _handleBackgroundNavigation,
     );
 
-    final initialMessage = await messaging.getInitialMessage();
+    final initialMessage =
+    await messaging.getInitialMessage();
 
     if (initialMessage != null) {
-      NotificationNavigation.handle(initialMessage);
+      _storePendingNavigation(initialMessage);
     }
   }
 
@@ -48,5 +53,28 @@ class NotificationService {
       title: notification.title ?? '',
       body: notification.body ?? '',
     );
+  }
+
+  void _handleBackgroundNavigation(
+      RemoteMessage message,
+      ) {
+    final id = message.data['id'];
+
+    if (id == null) return;
+
+    Get.toNamed(
+      RouteName.recipeDetails,
+      arguments: int.parse(id),
+    );
+  }
+
+  void _storePendingNavigation(
+      RemoteMessage message,
+      ) {
+    final id = message.data['id'];
+
+    if (id == null) return;
+
+    pendingRecipeId = int.tryParse(id);
   }
 }

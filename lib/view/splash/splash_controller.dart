@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../core/notifications/notification_route_manager.dart';
+import '../../core/notifications/notification_service.dart';
 import '../../core/routes/route_name.dart';
 import '../../core/storage/secure_storage.dart';
 
@@ -41,28 +41,6 @@ class SplashController extends GetxController
 
     _checkLoginStatus();
 
-    if (NotificationRouteManager.hasPendingRecipe) {
-      final id = int.parse(
-        NotificationRouteManager.recipeId!,
-      );
-
-      NotificationRouteManager.clear();
-
-      Get.offAllNamed(RouteName.bottomNavigation);
-
-      Future.delayed(
-        const Duration(milliseconds: 300),
-            () {
-          Get.toNamed(
-            RouteName.recipeDetails,
-            arguments: id,
-          );
-        },
-      );
-
-      return;
-    }
-
   }
 
   /* What mounted does
@@ -83,19 +61,40 @@ class SplashController extends GetxController
   Future<void> _checkLoginStatus() async {
     await Future.delayed(const Duration(seconds: 2));
 
-    // Check dummy-json token (email login)
     final token = await SecureStorage.getToken();
 
-    // Check Firebase User(Google / facebook)
     final firebaseUser = await SecureStorage.getFirebaseUser();
 
-    final isLoggedIn = (token != null && token.isNotEmpty) || (firebaseUser != null);
+    final isLoggedIn =
+        (token != null && token.isNotEmpty) ||
+            (firebaseUser != null);
 
-    if (isLoggedIn) {
-      Get.offAllNamed(RouteName.bottomNavigation);
-    } else {
+    if (!isLoggedIn) {
       Get.offAllNamed(RouteName.login);
+      return;
     }
+
+    final pendingRecipeId =
+        NotificationService.instance.pendingRecipeId;
+
+    if (pendingRecipeId != null) {
+      NotificationService.instance.pendingRecipeId = null;
+
+      Get.offAllNamed(RouteName.bottomNavigation);
+
+      await Future.delayed(
+        const Duration(milliseconds: 300),
+      );
+
+      Get.toNamed(
+        RouteName.recipeDetails,
+        arguments: pendingRecipeId,
+      );
+
+      return;
+    }
+
+    Get.offAllNamed(RouteName.bottomNavigation);
   }
 
   @override
